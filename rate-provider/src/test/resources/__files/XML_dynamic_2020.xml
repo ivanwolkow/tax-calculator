@@ -1,0 +1,974 @@
+<ValCurs ID="R01235" DateRange1="01.01.2020" DateRange2="31.12.2020" name="Foreign Currency Market Dynamic">
+    <!--<Record Date="01.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,9057</Value>
+    </Record>-->
+    <Record Date="10.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,2340</Value>
+    </Record>
+    <Record Date="11.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,2632</Value>
+    </Record>
+    <Record Date="14.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>60,9474</Value>
+    </Record>
+    <Record Date="15.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,4140</Value>
+    </Record>
+    <Record Date="16.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,4328</Value>
+    </Record>
+    <Record Date="17.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,5694</Value>
+    </Record>
+    <Record Date="18.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,5333</Value>
+    </Record>
+    <Record Date="21.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,4654</Value>
+    </Record>
+    <Record Date="22.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,8552</Value>
+    </Record>
+    <Record Date="23.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,8343</Value>
+    </Record>
+    <Record Date="24.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,9515</Value>
+    </Record>
+    <Record Date="25.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>61,8031</Value>
+    </Record>
+    <Record Date="28.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>62,3380</Value>
+    </Record>
+    <Record Date="29.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>62,8299</Value>
+    </Record>
+    <Record Date="30.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>62,3934</Value>
+    </Record>
+    <Record Date="31.01.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,0359</Value>
+    </Record>
+    <Record Date="01.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,1385</Value>
+    </Record>
+    <Record Date="04.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,9091</Value>
+    </Record>
+    <Record Date="05.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,4342</Value>
+    </Record>
+    <Record Date="06.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,1742</Value>
+    </Record>
+    <Record Date="07.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>62,7977</Value>
+    </Record>
+    <Record Date="08.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,4720</Value>
+    </Record>
+    <Record Date="11.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,7708</Value>
+    </Record>
+    <Record Date="12.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,9490</Value>
+    </Record>
+    <Record Date="13.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,0470</Value>
+    </Record>
+    <Record Date="14.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,6016</Value>
+    </Record>
+    <Record Date="15.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,4536</Value>
+    </Record>
+    <Record Date="18.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,3085</Value>
+    </Record>
+    <Record Date="19.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,7698</Value>
+    </Record>
+    <Record Date="20.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,6873</Value>
+    </Record>
+    <Record Date="21.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>63,7413</Value>
+    </Record>
+    <Record Date="22.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>64,3008</Value>
+    </Record>
+    <Record Date="26.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>64,9213</Value>
+    </Record>
+    <Record Date="27.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>65,5177</Value>
+    </Record>
+    <Record Date="28.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>65,6097</Value>
+    </Record>
+    <Record Date="29.02.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>66,9909</Value>
+    </Record>
+    <Record Date="03.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>66,3274</Value>
+    </Record>
+    <Record Date="04.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>66,4437</Value>
+    </Record>
+    <Record Date="05.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>66,0784</Value>
+    </Record>
+    <Record Date="06.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>66,1854</Value>
+    </Record>
+    <Record Date="07.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>67,5175</Value>
+    </Record>
+    <Record Date="11.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>72,0208</Value>
+    </Record>
+    <Record Date="12.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,4720</Value>
+    </Record>
+    <Record Date="13.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,0274</Value>
+    </Record>
+    <Record Date="14.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,1882</Value>
+    </Record>
+    <Record Date="17.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,1262</Value>
+    </Record>
+    <Record Date="18.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,8896</Value>
+    </Record>
+    <Record Date="19.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,2131</Value>
+    </Record>
+    <Record Date="20.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>80,1570</Value>
+    </Record>
+    <Record Date="21.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,0443</Value>
+    </Record>
+    <Record Date="24.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>80,8815</Value>
+    </Record>
+    <Record Date="25.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,8493</Value>
+    </Record>
+    <Record Date="26.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,7928</Value>
+    </Record>
+    <Record Date="27.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,7223</Value>
+    </Record>
+    <Record Date="28.03.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,7325</Value>
+    </Record>
+    <Record Date="07.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,4074</Value>
+    </Record>
+    <Record Date="08.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,4550</Value>
+    </Record>
+    <Record Date="09.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,7499</Value>
+    </Record>
+    <Record Date="10.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,6050</Value>
+    </Record>
+    <Record Date="11.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,7515</Value>
+    </Record>
+    <Record Date="14.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,5245</Value>
+    </Record>
+    <Record Date="15.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,3150</Value>
+    </Record>
+    <Record Date="16.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,7145</Value>
+    </Record>
+    <Record Date="17.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,7119</Value>
+    </Record>
+    <Record Date="18.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,9441</Value>
+    </Record>
+    <Record Date="21.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,6657</Value>
+    </Record>
+    <Record Date="22.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,2562</Value>
+    </Record>
+    <Record Date="23.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,0416</Value>
+    </Record>
+    <Record Date="24.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,1290</Value>
+    </Record>
+    <Record Date="25.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,7163</Value>
+    </Record>
+    <Record Date="28.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,4960</Value>
+    </Record>
+    <Record Date="29.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,5706</Value>
+    </Record>
+    <Record Date="30.04.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,6894</Value>
+    </Record>
+    <Record Date="01.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>72,7263</Value>
+    </Record>
+    <Record Date="07.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,9719</Value>
+    </Record>
+    <Record Date="08.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,1169</Value>
+    </Record>
+    <Record Date="09.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,8725</Value>
+    </Record>
+    <Record Date="13.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,4326</Value>
+    </Record>
+    <Record Date="14.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,5819</Value>
+    </Record>
+    <Record Date="15.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,9298</Value>
+    </Record>
+    <Record Date="16.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,2056</Value>
+    </Record>
+    <Record Date="19.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>72,9798</Value>
+    </Record>
+    <Record Date="20.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>72,3918</Value>
+    </Record>
+    <Record Date="21.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>72,3381</Value>
+    </Record>
+    <Record Date="22.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,9240</Value>
+    </Record>
+    <Record Date="23.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,8804</Value>
+    </Record>
+    <Record Date="26.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,5962</Value>
+    </Record>
+    <Record Date="27.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,1408</Value>
+    </Record>
+    <Record Date="28.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,0635</Value>
+    </Record>
+    <Record Date="29.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,1012</Value>
+    </Record>
+    <Record Date="30.05.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,7520</Value>
+    </Record>
+    <Record Date="02.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,7114</Value>
+    </Record>
+    <Record Date="03.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>68,9831</Value>
+    </Record>
+    <Record Date="04.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>68,3413</Value>
+    </Record>
+    <Record Date="05.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,0151</Value>
+    </Record>
+    <Record Date="06.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>68,6319</Value>
+    </Record>
+    <Record Date="09.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>68,3123</Value>
+    </Record>
+    <Record Date="10.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>68,6745</Value>
+    </Record>
+    <Record Date="11.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>68,6183</Value>
+    </Record>
+    <Record Date="12.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,1219</Value>
+    </Record>
+    <Record Date="16.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,3950</Value>
+    </Record>
+    <Record Date="17.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,7524</Value>
+    </Record>
+    <Record Date="18.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,4822</Value>
+    </Record>
+    <Record Date="19.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,6180</Value>
+    </Record>
+    <Record Date="20.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,5725</Value>
+    </Record>
+    <Record Date="23.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,4835</Value>
+    </Record>
+    <Record Date="24.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>68,8376</Value>
+    </Record>
+    <Record Date="25.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>68,8376</Value>
+    </Record>
+    <Record Date="26.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,4660</Value>
+    </Record>
+    <Record Date="27.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,1284</Value>
+    </Record>
+    <Record Date="30.06.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>69,9513</Value>
+    </Record>
+    <Record Date="01.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,4413</Value>
+    </Record>
+    <Record Date="02.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,4413</Value>
+    </Record>
+    <Record Date="03.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,5198</Value>
+    </Record>
+    <Record Date="04.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,4999</Value>
+    </Record>
+    <Record Date="07.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,3409</Value>
+    </Record>
+    <Record Date="08.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>72,1719</Value>
+    </Record>
+    <Record Date="09.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,2379</Value>
+    </Record>
+    <Record Date="10.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,8800</Value>
+    </Record>
+    <Record Date="11.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,2298</Value>
+    </Record>
+    <Record Date="14.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,7479</Value>
+    </Record>
+    <Record Date="15.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,1275</Value>
+    </Record>
+    <Record Date="16.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,7998</Value>
+    </Record>
+    <Record Date="17.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,2310</Value>
+    </Record>
+    <Record Date="18.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,7139</Value>
+    </Record>
+    <Record Date="21.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,9628</Value>
+    </Record>
+    <Record Date="22.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,9668</Value>
+    </Record>
+    <Record Date="23.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,7881</Value>
+    </Record>
+    <Record Date="24.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>70,9630</Value>
+    </Record>
+    <Record Date="25.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,5974</Value>
+    </Record>
+    <Record Date="28.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,5850</Value>
+    </Record>
+    <Record Date="29.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>71,9196</Value>
+    </Record>
+    <Record Date="30.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>72,2348</Value>
+    </Record>
+    <Record Date="31.07.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,3633</Value>
+    </Record>
+    <Record Date="01.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,4261</Value>
+    </Record>
+    <Record Date="04.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,1586</Value>
+    </Record>
+    <Record Date="05.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,3806</Value>
+    </Record>
+    <Record Date="06.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,2806</Value>
+    </Record>
+    <Record Date="07.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,0397</Value>
+    </Record>
+    <Record Date="08.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,6376</Value>
+    </Record>
+    <Record Date="11.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,7750</Value>
+    </Record>
+    <Record Date="12.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,1522</Value>
+    </Record>
+    <Record Date="13.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,2351</Value>
+    </Record>
+    <Record Date="14.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,6067</Value>
+    </Record>
+    <Record Date="15.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,2157</Value>
+    </Record>
+    <Record Date="18.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>72,9676</Value>
+    </Record>
+    <Record Date="19.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,4321</Value>
+    </Record>
+    <Record Date="20.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,2392</Value>
+    </Record>
+    <Record Date="21.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,7711</Value>
+    </Record>
+    <Record Date="22.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,0999</Value>
+    </Record>
+    <Record Date="25.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,4184</Value>
+    </Record>
+    <Record Date="26.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,5126</Value>
+    </Record>
+    <Record Date="27.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,5379</Value>
+    </Record>
+    <Record Date="28.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,2354</Value>
+    </Record>
+    <Record Date="29.08.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,6382</Value>
+    </Record>
+    <Record Date="01.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,8039</Value>
+    </Record>
+    <Record Date="02.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,5849</Value>
+    </Record>
+    <Record Date="03.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,8588</Value>
+    </Record>
+    <Record Date="04.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,4680</Value>
+    </Record>
+    <Record Date="05.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,1823</Value>
+    </Record>
+    <Record Date="08.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,5910</Value>
+    </Record>
+    <Record Date="09.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,9645</Value>
+    </Record>
+    <Record Date="10.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,0713</Value>
+    </Record>
+    <Record Date="11.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,5274</Value>
+    </Record>
+    <Record Date="12.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,8896</Value>
+    </Record>
+    <Record Date="15.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,7148</Value>
+    </Record>
+    <Record Date="16.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,1884</Value>
+    </Record>
+    <Record Date="17.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,9278</Value>
+    </Record>
+    <Record Date="18.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,1941</Value>
+    </Record>
+    <Record Date="19.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,0319</Value>
+    </Record>
+    <Record Date="22.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,0381</Value>
+    </Record>
+    <Record Date="23.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,2711</Value>
+    </Record>
+    <Record Date="24.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,3545</Value>
+    </Record>
+    <Record Date="25.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,1780</Value>
+    </Record>
+    <Record Date="26.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,8195</Value>
+    </Record>
+    <Record Date="29.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,6713</Value>
+    </Record>
+    <Record Date="30.09.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>79,6845</Value>
+    </Record>
+    <Record Date="01.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,7847</Value>
+    </Record>
+    <Record Date="02.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,2774</Value>
+    </Record>
+    <Record Date="03.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,0915</Value>
+    </Record>
+    <Record Date="06.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,1281</Value>
+    </Record>
+    <Record Date="07.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,5119</Value>
+    </Record>
+    <Record Date="08.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,0921</Value>
+    </Record>
+    <Record Date="09.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,9157</Value>
+    </Record>
+    <Record Date="10.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,0284</Value>
+    </Record>
+    <Record Date="13.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,0239</Value>
+    </Record>
+    <Record Date="14.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,2855</Value>
+    </Record>
+    <Record Date="15.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,2759</Value>
+    </Record>
+    <Record Date="16.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,9461</Value>
+    </Record>
+    <Record Date="17.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,9644</Value>
+    </Record>
+    <Record Date="20.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,9241</Value>
+    </Record>
+    <Record Date="21.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,7780</Value>
+    </Record>
+    <Record Date="22.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,0322</Value>
+    </Record>
+    <Record Date="23.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,0809</Value>
+    </Record>
+    <Record Date="24.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,4667</Value>
+    </Record>
+    <Record Date="27.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,4443</Value>
+    </Record>
+    <Record Date="28.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,4556</Value>
+    </Record>
+    <Record Date="29.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,5520</Value>
+    </Record>
+    <Record Date="30.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,8699</Value>
+    </Record>
+    <Record Date="31.10.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>79,3323</Value>
+    </Record>
+    <Record Date="03.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>80,5749</Value>
+    </Record>
+    <Record Date="04.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>80,0006</Value>
+    </Record>
+    <Record Date="06.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>78,4559</Value>
+    </Record>
+    <Record Date="07.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,1875</Value>
+    </Record>
+    <Record Date="10.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,9515</Value>
+    </Record>
+    <Record Date="11.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,3978</Value>
+    </Record>
+    <Record Date="12.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,2075</Value>
+    </Record>
+    <Record Date="13.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,1148</Value>
+    </Record>
+    <Record Date="14.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>77,3262</Value>
+    </Record>
+    <Record Date="17.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,9197</Value>
+    </Record>
+    <Record Date="18.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,2530</Value>
+    </Record>
+    <Record Date="19.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,9268</Value>
+    </Record>
+    <Record Date="20.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,2627</Value>
+    </Record>
+    <Record Date="21.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,0120</Value>
+    </Record>
+    <Record Date="24.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,7600</Value>
+    </Record>
+    <Record Date="25.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,8146</Value>
+    </Record>
+    <Record Date="26.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,4727</Value>
+    </Record>
+    <Record Date="27.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,4518</Value>
+    </Record>
+    <Record Date="28.11.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,8599</Value>
+    </Record>
+    <Record Date="01.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,1999</Value>
+    </Record>
+    <Record Date="02.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>76,3203</Value>
+    </Record>
+    <Record Date="03.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,6151</Value>
+    </Record>
+    <Record Date="04.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,1996</Value>
+    </Record>
+    <Record Date="05.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,2529</Value>
+    </Record>
+    <Record Date="08.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,2506</Value>
+    </Record>
+    <Record Date="09.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,6618</Value>
+    </Record>
+    <Record Date="10.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,3057</Value>
+    </Record>
+    <Record Date="11.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,7124</Value>
+    </Record>
+    <Record Date="12.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,1195</Value>
+    </Record>
+    <Record Date="15.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>72,9272</Value>
+    </Record>
+    <Record Date="16.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,4453</Value>
+    </Record>
+    <Record Date="17.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,4201</Value>
+    </Record>
+    <Record Date="18.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>72,9781</Value>
+    </Record>
+    <Record Date="19.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,3155</Value>
+    </Record>
+    <Record Date="22.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,6721</Value>
+    </Record>
+    <Record Date="23.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,3498</Value>
+    </Record>
+    <Record Date="24.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>75,4571</Value>
+    </Record>
+    <Record Date="25.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>74,8392</Value>
+    </Record>
+    <Record Date="26.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,6921</Value>
+    </Record>
+    <Record Date="29.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,7175</Value>
+    </Record>
+    <Record Date="30.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,6567</Value>
+    </Record>
+    <Record Date="31.12.2020" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>73,8757</Value>
+    </Record>
+</ValCurs>

@@ -1,0 +1,8 @@
+Trades,Header,DataDiscriminator,Asset Category,Currency,Symbol,Date/Time,Quantity,T. Price,C. Price,Proceeds,Comm/Fee,Basis,Realized P/L,MTM P/L,Code
+Trades,Data,Order,Stocks,USD,BND,"2020-03-12, 12:53:42",10,88.435,88.39,-884.35,-1,885.35,0,-0.45,O
+Trades,Data,Order,Stocks,USD,BND,"2020-06-02, 13:14:54",10,87.93,87.77,-879.3,-1,880.3,0,-1.6,O
+Trades,Data,Order,Stocks,USD,BND,"2020-10-26, 15:51:49",-20,87.885,87.89,1757.7,-1.04122517,-1765.65,-8.991226,-0.1,C
+Trades,Data,Order,Stocks,USD,VOO,"2019-05-01, 15:36:30",2,285.98,285.37,-571.96,-1,572.96,0,-1.22,O
+Trades,Data,Order,Stocks,USD,VOO,"2020-06-07, 10:04:24",2,290.65,288.24,-581.3,-1,582.3,0,-4.82,O
+Trades,Data,Order,Stocks,USD,VOO,"2020-07-14, 14:31:34",-1,295.1,294.82,295.1,-1,286.48,0,-0.56,C
+Trades,Data,Order,Stocks,USD,VOO,"2020-08-30, 10:41:10",-3,295.39,297.61,886.17,-1,868.78,0,2.22,C
