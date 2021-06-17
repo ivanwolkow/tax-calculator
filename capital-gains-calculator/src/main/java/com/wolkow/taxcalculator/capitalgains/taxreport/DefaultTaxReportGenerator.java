@@ -63,7 +63,7 @@ public class DefaultTaxReportGenerator implements TaxReportGenerator {
                 .map(gain -> processGain(gain, printer))
                 .reduce(ZERO, BigDecimal::add);
 
-        BigDecimal taxToPay = (totalInTaxCurrency.compareTo(ZERO) >= 0)
+        BigDecimal taxToPay = (totalInTaxCurrency.compareTo(ZERO) <= 0)
                 ? ZERO
                 : totalInTaxCurrency.multiply(properties.getTaxRate()).scaleByPowerOfTen(-2);
 
@@ -77,6 +77,9 @@ public class DefaultTaxReportGenerator implements TaxReportGenerator {
 
         printer.flush();
         printer.close();
+
+        log.info("Total capital gains tax yet to pay: {}", taxToPay.setScale(2, UP));
+        log.info("Capital gains report {} has been successfully generated\n", properties.getOutputFile());
     }
 
     @SneakyThrows
@@ -96,14 +99,14 @@ public class DefaultTaxReportGenerator implements TaxReportGenerator {
 
     @SneakyThrows
     private BigDecimal processTradeEntry(Trade trade, CSVPrinter printer) {
-        BigDecimal transaction = trade.getPricePerShare().multiply(new BigDecimal(trade.getQuantity()));
+        BigDecimal transaction = trade.getPricePerShare().multiply(new BigDecimal(trade.getQuantity())).negate();
         BigDecimal transactionRate = rateProvider.getRateByDateAndCurrency(trade.getTime().toLocalDate(), trade.getCurrency());
         BigDecimal transactionInTaxCurrency = transaction.multiply(transactionRate);
 
         BigDecimal feeRate = rateProvider.getRateByDateAndCurrency(trade.getTime().toLocalDate(), trade.getFeeCurrency());
         BigDecimal feeInTaxCurrency = trade.getFee().multiply(feeRate);
 
-        BigDecimal totalInTaxCurrency = transactionInTaxCurrency.subtract(feeInTaxCurrency);
+        BigDecimal totalInTaxCurrency = transactionInTaxCurrency.add(feeInTaxCurrency);
 
         printer.printRecord(
                 trade.getTime(),
