@@ -56,17 +56,15 @@ public class CapitalGainsCalculatorApplication {
     }
 
     void run() {
-        log.info("Collecting trades...");
+        log.info("Searching for buys and sells...");
         Collection<Trade> tradeList = tradeProvider.readTrades();
 
-        log.info("Grouping buys by ticker and sorting...");
         buysByTicker = StreamEx.of(tradeList)
                 .filter(trade -> trade.getQuantity() > 0)
                 .sorted(Comparator.comparing(Trade::getTime))
                 .groupingBy(Trade::getTicker, Collectors.toCollection(LinkedList::new));
         buysByTicker.forEach((ticker, buys) -> log.info("{}: {} buys", ticker, buys.size()));
 
-        log.info("Mapping sells to buys...");
         List<Gain> gains = StreamEx.of(tradeList)
                 .filter(trade -> trade.getQuantity() < 0)
                 .filter(sell -> sell.getTime().getYear() <= properties.getYear())
@@ -74,7 +72,9 @@ public class CapitalGainsCalculatorApplication {
                 .map(this::mapToGain)
                 .filter(gain -> gain.getSell().getTime().getYear() == properties.getYear())
                 .toList();
-        log.info("Found {} sells in year {}: {}", gains.size(), properties.getYear(), gains);
+
+        log.info("Found {} sells in year {}. Lot-Matching result:", gains.size(), properties.getYear());
+        gains.forEach(gain -> log.info(gain.toString()));
 
         taxReportGenerator.generateReport(gains);
     }
@@ -113,7 +113,7 @@ public class CapitalGainsCalculatorApplication {
     private static ApplicationProperties properties(String... args) {
         Options options = new Options();
         options.addOption("y", "year", true, "Financial year (default = previous year)");
-        options.addOption("i", "in", true, "Path to directory with broker activity reports (default = ./)");
+        options.addOption("i", "in", true, "Directory to be recursively searched for activity reports (default = ./)");
         options.addOption("o", "out", true, "Name of the csv file this calculator will print result to (default = ./capital-gains-tax-report.csv)");
         options.addOption("tr", "tax-rate", true, "Tax rate in country of residence (default = 13)");
         options.addOption("tc", "tax-currency", true, "Main currency of the country of residence (default = RUB)");
@@ -131,10 +131,12 @@ public class CapitalGainsCalculatorApplication {
             System.exit(0);
         }
 
+        var year = Integer.valueOf(p.getOptionValue("y", String.valueOf(LocalDate.now().getYear() - 1)));
+
         return ApplicationProperties.builder()
-                .year(Integer.valueOf(p.getOptionValue("y", String.valueOf(LocalDate.now().getYear() - 1))))
+                .year(year)
                 .reportDir(new File(p.getOptionValue("i", "./")))
-                .outputFile(new File(p.getOptionValue("o", "./capital-gains-tax-report.csv")))
+                .outputFile(new File(p.getOptionValue("o", String.format("./capital-gains-tax-report-%d.csv", year))))
                 .taxRate(new BigDecimal(p.getOptionValue("tr", "13.00")))
                 .taxCurrency(p.getOptionValue("tc", "RUB"))
                 .taxTimeZone(ZoneId.of(p.getOptionValue("tz", "+03")))

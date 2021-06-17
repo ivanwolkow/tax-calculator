@@ -19,10 +19,9 @@ public class Gain {
 
     @Override
     public String toString() {
-        return "Gain{" +
-                "ticker='" + ticker + '\'' +
-                ", buys=" + buys +
+        return "{ticker='" + ticker + '\'' +
                 ", sell=" + sell +
+                ", buys=" + buys +
                 '}';
     }
 }

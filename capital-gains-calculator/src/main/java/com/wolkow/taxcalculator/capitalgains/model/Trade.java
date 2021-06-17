@@ -35,8 +35,8 @@ public class Trade {
 
     @Override
     public String toString() {
-        return "Trade{" +
-                "time=" + time +
+        return "{time=" + time +
+                ", price=" + pricePerShare +
                 ", quantity=" + quantity +
                 '}';
     }

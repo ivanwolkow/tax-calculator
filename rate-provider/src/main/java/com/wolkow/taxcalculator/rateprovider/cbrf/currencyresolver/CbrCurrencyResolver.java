@@ -60,7 +60,7 @@ public class CbrCurrencyResolver implements CurrencyResolver {
                 .mapValues(String::trim)
                 .toImmutableMap();
 
-        log.info("Loaded currency mapping with {} currencies", map.size());
+        log.info("Loaded currency mapping for {} currencies", map.size());
         return map;
     }
 

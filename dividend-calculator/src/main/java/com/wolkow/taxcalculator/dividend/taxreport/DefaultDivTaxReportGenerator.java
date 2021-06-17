@@ -4,6 +4,7 @@ import com.wolkow.taxcalculator.dividend.model.Dividend;
 import com.wolkow.taxcalculator.dividend.properties.ApplicationProperties;
 import com.wolkow.taxcalculator.rateprovider.RateProvider;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -14,10 +15,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.math.RoundingMode.UP;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.LF;
 
+@Slf4j
 public class DefaultDivTaxReportGenerator implements DivTaxReportGenerator {
 
     private final ApplicationProperties properties;
@@ -57,10 +60,13 @@ public class DefaultDivTaxReportGenerator implements DivTaxReportGenerator {
                 .map(div -> processDividend(div, printer))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        printer.printRecord(createRecord("TOTAL", emptyFields(11), totalInTaxCurrency));
+        printer.printRecord(createRecord("TOTAL", emptyFields(11), totalInTaxCurrency.setScale(2, UP)));
 
         printer.flush();
         printer.close();
+
+        log.info("Total dividend tax yet to pay: {}", totalInTaxCurrency.setScale(2, UP));
+        log.info("Dividend report {} has been successfully generated\n", properties.getOutputFile());
     }
 
     @SneakyThrows
