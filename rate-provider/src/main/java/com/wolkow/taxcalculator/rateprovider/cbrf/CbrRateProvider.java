@@ -24,9 +24,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static java.math.BigDecimal.ONE;
 import static java.time.Month.DECEMBER;
@@ -35,8 +33,9 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Rate provider which fetched rates from Central Bank of Russia web service.
- * This rate provider is not thread-safe by design.
- * It supports caching and fetching rates in chunks.
+ * This implementation is thread-safe. All methods achieve their effects atomically using internal
+ * locks or other forms of concurrency control.
+ * This implementation supports caching and fetching rates in chunks.
  */
 @Slf4j
 public class CbrRateProvider implements RateProvider {
@@ -44,14 +43,14 @@ public class CbrRateProvider implements RateProvider {
     private final static DateTimeFormatter CB_RF_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final static String CB_RF_BASE_CURRENCY = "RUB";
 
-    private final Map<Map.Entry<String, Integer>, TreeMap<LocalDate, BigDecimal>> cache;
+    private final Map<Map.Entry<String, Integer>, NavigableMap<LocalDate, BigDecimal>> cache;
+
     private final Persister xmlPersister;
     private final HttpClient httpClient;
     private final String cbrHost;
     private final CurrencyResolver currencyResolver;
 
     public CbrRateProvider(String cbrHost) {
-
         this.cbrHost = cbrHost;
         this.xmlPersister = new Persister(new CbrXmlMatcher());
         this.cache = new HashMap<>();
@@ -65,40 +64,51 @@ public class CbrRateProvider implements RateProvider {
         if (CB_RF_BASE_CURRENCY.equalsIgnoreCase(currency)) return ONE.round(new MathContext(2));
 
         SimpleEntry<String, Integer> cacheKey = new SimpleEntry<>(currency, date.getYear());
-        if (!cache.containsKey(cacheKey)) fillCache(currency, date.getYear());
+        if (!cache.containsKey(cacheKey)) {
+            log.debug("Cache miss for currency {} , date {}, filling cache...", currency, date);
+            fillCache(cacheKey);
+        }
 
-        TreeMap<LocalDate, BigDecimal> sortedRates = cache.get(cacheKey);
-
+        NavigableMap<LocalDate, BigDecimal> sortedRates = cache.get(cacheKey);
         Map.Entry<LocalDate, BigDecimal> closestRate = sortedRates.floorEntry(date);
+
         if (closestRate != null) return closestRate.getValue();
 
-        log.warn("Unable to find closest rate during current year for {}:{}, loading rates for previous year (if necessary) " +
-                "and grabbing the last entry", currency, date);
-        fillCache(currency, date.getYear() - 1);
+        log.warn("Unable to find closest rate during current year for {}:{}, fetching last rate for previous year", currency, date);
+        fillCache(new SimpleEntry<>(currency, date.getYear() - 1));
         return cache.get(new SimpleEntry<>(currency, date.getYear() - 1)).lastEntry().getValue();
     }
 
     @SneakyThrows
-    private void fillCache(String currency, int year) {
-        SimpleEntry<String, Integer> cacheKey = new SimpleEntry<>(currency, year);
-        if (cache.containsKey(cacheKey)) return;
+    private void fillCache(Map.Entry<String, Integer> cacheKey) {
+        String currency = cacheKey.getKey();
+        Integer year = cacheKey.getValue();
+        NavigableMap<LocalDate, BigDecimal> sortedRatesByCurrencyAndYear = cache.computeIfAbsent(cacheKey,
+                key -> Collections.synchronizedNavigableMap(new TreeMap<>()));
 
-        String currencyCode = requireNonNull(currencyResolver.resolveCodeByName(currency));
+        synchronized (sortedRatesByCurrencyAndYear) {
+            if (!sortedRatesByCurrencyAndYear.isEmpty()) return;
 
-        URI uri = new URIBuilder("/scripts/XML_dynamic.asp")
-                .addParameter("date_req1", YearMonth.of(year, JANUARY).atDay(1).format(CB_RF_FORMATTER))
-                .addParameter("date_req2", YearMonth.of(year, DECEMBER).atDay(31).format(CB_RF_FORMATTER))
-                .addParameter("VAL_NM_RQ", currencyCode)
-                .build();
+            log.debug("Populating conversion rate cache for {}:{}...", currency, year);
+            String currencyCode = requireNonNull(currencyResolver.resolveCodeByName(currency));
 
-        HttpResponse response = httpClient.execute(HttpHost.create(cbrHost), new HttpGet(uri));
-        CbrRateResponse cbrRateResponse = xmlPersister.read(CbrRateResponse.class, response.getEntity().getContent());
+            URI uri = new URIBuilder("/scripts/XML_dynamic.asp")
+                    .addParameter("date_req1", YearMonth.of(year, JANUARY).atDay(1).format(CB_RF_FORMATTER))
+                    .addParameter("date_req2", YearMonth.of(year, DECEMBER).atDay(31).format(CB_RF_FORMATTER))
+                    .addParameter("VAL_NM_RQ", currencyCode)
+                    .build();
 
-        TreeMap<LocalDate, BigDecimal> sortedRates = StreamEx.of(cbrRateResponse.getRecords())
-                .mapToEntry(CbrRateRecord::getDate, CbrRateRecord::getValue)
-                .toCustomMap(TreeMap::new);
+            HttpResponse response = httpClient.execute(HttpHost.create(cbrHost), new HttpGet(uri));
+            CbrRateResponse cbrRateResponse = xmlPersister.read(CbrRateResponse.class, response.getEntity().getContent());
 
-        cache.put(cacheKey, sortedRates);
+            StreamEx.of(cbrRateResponse.getRecords())
+                    .mapToEntry(CbrRateRecord::getDate, CbrRateRecord::getValue)
+                    .forKeyValue(sortedRatesByCurrencyAndYear::put);
+        }
     }
 
+    @Override
+    public String getBaseCurrency() {
+        return CB_RF_BASE_CURRENCY;
+    }
 }

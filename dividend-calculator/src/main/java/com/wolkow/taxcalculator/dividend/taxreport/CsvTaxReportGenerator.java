@@ -1,7 +1,6 @@
 package com.wolkow.taxcalculator.dividend.taxreport;
 
 import com.wolkow.taxcalculator.dividend.model.Dividend;
-import com.wolkow.taxcalculator.dividend.properties.ApplicationProperties;
 import com.wolkow.taxcalculator.rateprovider.RateProvider;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -9,36 +8,35 @@ import one.util.streamex.StreamEx;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
-import java.io.FileWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static java.math.RoundingMode.UP;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.LF;
 
 @Slf4j
-public class DefaultDivTaxReportGenerator implements DivTaxReportGenerator {
+public class CsvTaxReportGenerator implements TaxReportGenerator {
 
-    private final ApplicationProperties properties;
     private final RateProvider rateProvider;
+    private final BigDecimal taxRate;
 
-    public DefaultDivTaxReportGenerator(ApplicationProperties properties, RateProvider rateProvider) {
-        this.properties = properties;
+    public CsvTaxReportGenerator(RateProvider rateProvider, BigDecimal taxRate) {
         this.rateProvider = rateProvider;
+        this.taxRate = taxRate;
+    }
+
+    @Override
+    public String getName() {
+        return "csv";
     }
 
     @Override
     @SneakyThrows
-    public void generateReport(List<Dividend> dividends) {
-        var output = properties.getOutputFile();
-        output.getParentFile().mkdirs();
-
-        var printer = new CSVPrinter(new FileWriter(output, UTF_8),
-                CSVFormat.DEFAULT.withRecordSeparator(LF));
+    public void generateReport(Appendable appendable, List<Dividend> dividends) {
+        var printer = new CSVPrinter(appendable, CSVFormat.DEFAULT.withRecordSeparator(LF));
 
         printer.printRecord(
                 "date",
@@ -48,16 +46,16 @@ public class DefaultDivTaxReportGenerator implements DivTaxReportGenerator {
                 "quantity",
                 "conversion rate",
                 "gross",
-                "gross in " + properties.getTaxCurrency(),
+                "gross in tax currency",
                 "tax rate",
-                "total tax in " + properties.getTaxCurrency(),
+                "total tax in tax currency",
                 "withhold by broker",
-                "withhold in " + properties.getTaxCurrency(),
-                "yet to pay in " + properties.getTaxCurrency()
+                "withhold in tax currency",
+                "yet to pay in tax currency"
         );
 
         BigDecimal totalInTaxCurrency = StreamEx.of(dividends)
-                .map(div -> processDividend(div, printer))
+                .map(div -> processDividend(printer, div))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         printer.printRecord(createRecord("TOTAL", emptyFields(11), totalInTaxCurrency.setScale(2, UP)));
@@ -66,14 +64,13 @@ public class DefaultDivTaxReportGenerator implements DivTaxReportGenerator {
         printer.close();
 
         log.info("Total dividend tax yet to pay: {}", totalInTaxCurrency.setScale(2, UP));
-        log.info("Dividend report {} has been successfully generated\n", properties.getOutputFile());
     }
 
     @SneakyThrows
-    private BigDecimal processDividend(Dividend dividend, CSVPrinter printer) {
+    private BigDecimal processDividend(CSVPrinter printer, Dividend dividend) {
         BigDecimal rate = rateProvider.getRateByDateAndCurrency(dividend.getDate(), dividend.getCurrency());
         BigDecimal grossInTaxCurrency = dividend.getGross().multiply(rate);
-        BigDecimal totalTaxInTaxCurrency = grossInTaxCurrency.multiply(properties.getTaxRate()).scaleByPowerOfTen(-2);
+        BigDecimal totalTaxInTaxCurrency = grossInTaxCurrency.multiply(taxRate).scaleByPowerOfTen(-2);
         BigDecimal withholdInTaxCurrency = dividend.getWithhold().multiply(rate);
         BigDecimal yetToPayInTaxCurrency = totalTaxInTaxCurrency.add(withholdInTaxCurrency).max(BigDecimal.ZERO);
 
@@ -85,12 +82,12 @@ public class DefaultDivTaxReportGenerator implements DivTaxReportGenerator {
                 rate,
                 dividend.getGross(),
                 grossInTaxCurrency,
-                properties.getTaxRate() + "%",
+                taxRate + "%",
                 totalTaxInTaxCurrency,
                 dividend.getWithhold(),
                 withholdInTaxCurrency,
                 yetToPayInTaxCurrency
-                );
+        );
 
         return yetToPayInTaxCurrency;
     }

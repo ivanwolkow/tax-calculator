@@ -4,20 +4,18 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.google.common.io.Resources;
-import com.wolkow.taxcalculator.dividend.divprovider.DivProvider;
-import com.wolkow.taxcalculator.dividend.divprovider.InteractiveBrokersDivProvider;
-import com.wolkow.taxcalculator.dividend.properties.ApplicationProperties;
-import com.wolkow.taxcalculator.dividend.taxreport.DefaultDivTaxReportGenerator;
-import com.wolkow.taxcalculator.dividend.taxreport.DivTaxReportGenerator;
-import com.wolkow.taxcalculator.rateprovider.RateProvider;
-import com.wolkow.taxcalculator.rateprovider.cbrf.CbrRateProvider;
+import com.wolkow.taxcalculator.dividend.divprovider.DivProviders;
+import com.wolkow.taxcalculator.dividend.taxreport.TaxReportGenerators;
+import com.wolkow.taxcalculator.rateprovider.RateProviders;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import one.util.streamex.StreamEx;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 
@@ -27,9 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DividendCalculatorApplicationTest {
 
-    private final static String CBR_HOST = "http://localhost:4567";
-
     private static WireMockServer wireMockServer;
+
+    private Reader[] sources;
 
     @BeforeAll
     static void beforeAll() {
@@ -60,35 +58,67 @@ class DividendCalculatorApplicationTest {
         wireMockServer.stop();
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @BeforeEach
+    @SneakyThrows
     void setUp() {
         wireMockServer.resetRequests();
+
+        File reportsDir = new File(Resources.getResource("interactive-brokers-dividend-reports/").toURI());
+
+        sources = StreamEx.of(FileUtils.listFiles(reportsDir, new String[]{"csv"}, false))
+                .map(this::createReportReader)
+                .toArray(Reader.class);
+    }
+
+    @AfterEach
+    @SneakyThrows
+    void tearDown() {
+        for (Reader source : sources) {
+            source.close();
+        }
     }
 
     @SuppressWarnings("UnstableApiUsage")
     @Test
     @SneakyThrows
-    void dividendCalculatorShouldGenerateCorrectReport() {
-        File reportsDir = new File(this.getClass().getClassLoader().getResource("interactive-brokers-dividend-reports/").toURI());
-        File outputFile = Files.createTempFile("div-report-2020-", ".csv").toFile();
+    void dividendCalculatorShouldGenerateCorrectReportForRate13() {
+        var outputFile = Files.createTempFile("div-report-2020-", ".csv").toFile();
+        var taxRate = new BigDecimal("13.00");
+        var divProvider = DivProviders.getByName("ib");
+        var rateProvider = RateProviders.getByBaseCurrency("RUB");
+        var reportGenerator = TaxReportGenerators.createByName("csv", rateProvider, taxRate);
 
-        ApplicationProperties properties = ApplicationProperties.builder()
-                .year(2020)
-                .taxCurrency("RUB")
-                .taxRate(new BigDecimal("13.00"))
-                .reportDir(reportsDir)
-                .outputFile(outputFile)
-                .build();
+        new DividendCalculator(divProvider, reportGenerator)
+                .generateTaxReport(new FileWriter(outputFile), 2020, sources);
 
-        DivProvider divProvider = new InteractiveBrokersDivProvider(properties);
-        RateProvider rateProvider = new CbrRateProvider(CBR_HOST);
-        DivTaxReportGenerator reportGenerator = new DefaultDivTaxReportGenerator(properties, rateProvider);
-
-        new DividendCalculatorApplication(properties, divProvider, reportGenerator).run();
-
-        String expectedReport = Resources.toString(Resources.getResource("dividend-tax-report.csv"), UTF_8);
+        String expectedReport = Resources.toString(Resources.getResource("dividend-tax-report-rate-13.csv"), UTF_8);
         String actualReport = Files.readString(outputFile.toPath());
         assertEquals(expectedReport, actualReport);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    @Test
+    @SneakyThrows
+    void dividendCalculatorShouldGenerateCorrectReportForRate15() {
+        var outputFile = Files.createTempFile("div-report-2020-", ".csv").toFile();
+        var taxRate = new BigDecimal("15.00");
+        var divProvider = DivProviders.getByName("ib");
+        var rateProvider = RateProviders.getByBaseCurrency("RUB");
+        var reportGenerator = TaxReportGenerators.createByName("csv", rateProvider, taxRate);
+
+        new DividendCalculator(divProvider, reportGenerator)
+                .generateTaxReport(new FileWriter(outputFile), 2020, sources);
+
+        String expectedReport = Resources.toString(Resources.getResource("dividend-tax-report-rate-15.csv"), UTF_8);
+        String actualReport = Files.readString(outputFile.toPath());
+        assertEquals(expectedReport, actualReport);
+    }
+
+
+    @SneakyThrows
+    private Reader createReportReader(File file) {
+        return new FileReader(file);
     }
 
 

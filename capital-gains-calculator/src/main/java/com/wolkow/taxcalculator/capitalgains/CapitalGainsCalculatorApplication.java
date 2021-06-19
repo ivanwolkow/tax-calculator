@@ -1,17 +1,12 @@
 package com.wolkow.taxcalculator.capitalgains;
 
-import com.google.common.base.Preconditions;
-import com.wolkow.taxcalculator.capitalgains.enums.TaxReportGeneratorType;
-import com.wolkow.taxcalculator.capitalgains.enums.TradeProviderType;
-import com.wolkow.taxcalculator.capitalgains.factories.TaxReportGeneratorFactory;
-import com.wolkow.taxcalculator.capitalgains.factories.TradeProviderFactory;
-import com.wolkow.taxcalculator.capitalgains.model.Gain;
-import com.wolkow.taxcalculator.capitalgains.model.Trade;
 import com.wolkow.taxcalculator.capitalgains.properties.ApplicationProperties;
 import com.wolkow.taxcalculator.capitalgains.taxreport.TaxReportGenerator;
+import com.wolkow.taxcalculator.capitalgains.taxreport.TaxReportGenerators;
 import com.wolkow.taxcalculator.capitalgains.tradeprovider.TradeProvider;
-import com.wolkow.taxcalculator.rateprovider.enums.RateProviderType;
-import com.wolkow.taxcalculator.rateprovider.factories.RateProviderFactory;
+import com.wolkow.taxcalculator.capitalgains.tradeprovider.TradeProviders;
+import com.wolkow.taxcalculator.rateprovider.RateProvider;
+import com.wolkow.taxcalculator.rateprovider.RateProviders;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
@@ -19,94 +14,35 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
-import java.util.stream.Collectors;
 
-import static java.util.Objects.requireNonNull;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 public class CapitalGainsCalculatorApplication {
 
-    private final ApplicationProperties properties;
-    private final TradeProvider tradeProvider;
-    private final TaxReportGenerator taxReportGenerator;
-
-    private Map<String, LinkedList<Trade>> buysByTicker;
-
-    public CapitalGainsCalculatorApplication(ApplicationProperties properties,
-                                             TradeProvider tradeProvider,
-                                             TaxReportGenerator taxReportGenerator) {
-        this.properties = properties;
-        this.tradeProvider = tradeProvider;
-        this.taxReportGenerator = taxReportGenerator;
-    }
-
+    @SneakyThrows
     public static void main(String[] args) {
-        ApplicationProperties properties = properties(args);
-        var rateProvider = RateProviderFactory.createRateProvider(properties.getRateProvider(), properties.getTaxCurrency());
-        var tradeProvider = TradeProviderFactory.createTradeProvider(properties);
-        var taxReportGenerator = TaxReportGeneratorFactory.createTaxReportGenerator(properties, rateProvider);
+        ApplicationProperties props = properties(args);
 
-        new CapitalGainsCalculatorApplication(properties, tradeProvider, taxReportGenerator).run();
-    }
+        var sources = StreamEx.of(FileUtils.listFiles(props.getReportDir(), new String[]{"csv"}, true))
+                .map(CapitalGainsCalculatorApplication::createReportReader)
+                .toArray(Reader.class);
 
-    void run() {
-        log.info("Searching for buys and sells...");
-        Collection<Trade> tradeList = tradeProvider.readTrades();
+        var outputFile = props.getOutputFile();
+        outputFile.getParentFile().mkdirs();
+        FileWriter destination = new FileWriter(outputFile, UTF_8);
 
-        buysByTicker = StreamEx.of(tradeList)
-                .filter(trade -> trade.getQuantity() > 0)
-                .sorted(Comparator.comparing(Trade::getTime))
-                .groupingBy(Trade::getTicker, Collectors.toCollection(LinkedList::new));
-        buysByTicker.forEach((ticker, buys) -> log.info("{}: {} buys", ticker, buys.size()));
-
-        List<Gain> gains = StreamEx.of(tradeList)
-                .filter(trade -> trade.getQuantity() < 0)
-                .filter(sell -> sell.getTime().getYear() <= properties.getYear())
-                .sorted(Comparator.comparing(Trade::getTime))
-                .map(this::mapToGain)
-                .filter(gain -> gain.getSell().getTime().getYear() == properties.getYear())
-                .toList();
-
-        log.info("Found {} sells in year {}. Lot-Matching result:", gains.size(), properties.getYear());
-        gains.forEach(gain -> log.info(gain.toString()));
-
-        taxReportGenerator.generateReport(gains);
-    }
-
-    private Gain mapToGain(Trade sell) {
-        LinkedList<Trade> buys = buysByTicker.get(sell.getTicker());
-
-        Preconditions.checkArgument(buys.size() > 0);
-
-        List<Trade> gainBuys = new ArrayList<>();
-        int sellQuantity = Math.abs(sell.getQuantity());
-
-        while (true) {
-            Trade buy = requireNonNull(buys.pollFirst());
-            int withdrawQuantity = Math.min(sellQuantity, buy.getQuantity());
-            sellQuantity -= withdrawQuantity;
-
-            if (sellQuantity != 0) {
-                gainBuys.add(buy);
-                continue;
-            }
-
-            if (buy.getQuantity() == withdrawQuantity) {
-                gainBuys.add(buy);
-            } else {
-                gainBuys.add(buy.clone(withdrawQuantity));
-                buys.addFirst(buy.clone(buy.getQuantity() - withdrawQuantity));
-            }
-            break;
-        }
-
-        return new Gain(sell.getTicker(), gainBuys, sell);
+        new CapitalGainsCalculator(props.getTradeProvider(), props.getTaxReportGenerator())
+                .calculateTaxReport(destination, props.getTaxTimeZone(), props.getYear(), sources);
     }
 
     @SneakyThrows
@@ -119,7 +55,6 @@ public class CapitalGainsCalculatorApplication {
         options.addOption("tc", "tax-currency", true, "Main currency of the country of residence (default = RUB)");
         options.addOption("tz", "tax-tz", true, "Tax timezone (default = +03)");
         options.addOption("tp", "trade-provider", true, "Trade provider (default = ib)");
-        options.addOption("rp", "rate-provider", true, "Conversion rate provider (default = cbr)");
         options.addOption("rg", "report-generator", true, "Tax report generator (default = default)");
         options.addOption("h", "help", false, "This help");
 
@@ -131,20 +66,30 @@ public class CapitalGainsCalculatorApplication {
             System.exit(0);
         }
 
-        var year = Integer.valueOf(p.getOptionValue("y", String.valueOf(LocalDate.now().getYear() - 1)));
+        Integer year = Integer.valueOf(p.getOptionValue("y", String.valueOf(LocalDate.now().getYear() - 1)));
+        String taxCurrency = p.getOptionValue("tc", "RUB");
+        ZoneId taxZone = ZoneId.of(p.getOptionValue("tz", "+03"));
+        BigDecimal taxRate = new BigDecimal(p.getOptionValue("tr", "13.00"));
+        TradeProvider tradeProvider = TradeProviders.getByName(p.getOptionValue("tp", "ib"));
+        RateProvider rateProvider = RateProviders.getByBaseCurrency(taxCurrency);
+        TaxReportGenerator reportGenerator = TaxReportGenerators.createByName(p.getOptionValue("rg", "csv"), rateProvider, taxRate, taxZone);
 
         return ApplicationProperties.builder()
-                .year(year)
                 .reportDir(new File(p.getOptionValue("i", "./")))
                 .outputFile(new File(p.getOptionValue("o", String.format("./capital-gains-tax-report-%d.csv", year))))
-                .taxRate(new BigDecimal(p.getOptionValue("tr", "13.00")))
-                .taxCurrency(p.getOptionValue("tc", "RUB"))
-                .taxTimeZone(ZoneId.of(p.getOptionValue("tz", "+03")))
-                .tradeProvider(TradeProviderType.findByShortName(p.getOptionValue("tp", "ib")))
-                .rateProvider(RateProviderType.findByShortName(p.getOptionValue("rp", "cbr")))
-                .taxReportGenerator(TaxReportGeneratorType.findByShortName(p.getOptionValue("rg", "default")))
+                .year(year)
+                .taxRate(taxRate)
+                .taxCurrency(taxCurrency)
+                .taxTimeZone(taxZone)
+                .tradeProvider(tradeProvider)
+                .taxReportGenerator(reportGenerator)
                 .build();
-
     }
+
+    @SneakyThrows
+    private static Reader createReportReader(File file) {
+        return new FileReader(file);
+    }
+
 
 }

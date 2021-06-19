@@ -4,21 +4,19 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.google.common.io.Resources;
-import com.wolkow.taxcalculator.capitalgains.properties.ApplicationProperties;
-import com.wolkow.taxcalculator.capitalgains.taxreport.DefaultTaxReportGenerator;
-import com.wolkow.taxcalculator.capitalgains.taxreport.TaxReportGenerator;
-import com.wolkow.taxcalculator.capitalgains.tradeprovider.InteractiveBrokersTradeProvider;
-import com.wolkow.taxcalculator.capitalgains.tradeprovider.TradeProvider;
-import com.wolkow.taxcalculator.rateprovider.RateProvider;
-import com.wolkow.taxcalculator.rateprovider.cbrf.CbrRateProvider;
+import com.wolkow.taxcalculator.capitalgains.taxreport.TaxReportGenerators;
+import com.wolkow.taxcalculator.capitalgains.tradeprovider.TradeProviders;
+import com.wolkow.taxcalculator.rateprovider.RateProviders;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import one.util.streamex.StreamEx;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.time.ZoneId;
@@ -30,9 +28,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 class CapitalGainsCalculatorApplicationTest {
 
-    private final static String CBR_HOST = "http://localhost:4567";
-
     private static WireMockServer wireMockServer;
+
+    private Reader[] sources;
 
     @BeforeAll
     static void beforeAll() {
@@ -64,34 +62,65 @@ class CapitalGainsCalculatorApplicationTest {
     }
 
     @BeforeEach
+    @SneakyThrows
     void setUp() {
         wireMockServer.resetRequests();
+
+        File reportsDir = new File(this.getClass().getClassLoader().getResource("interactive-brokers-activity-reports/").toURI());
+        sources = StreamEx.of(FileUtils.listFiles(reportsDir, new String[]{"csv"}, false))
+                .map(this::createReportReader)
+                .toArray(Reader.class);
+    }
+
+    @AfterEach
+    @SneakyThrows
+    void tearDown() {
+        for (Reader source : sources) {
+            source.close();
+        }
     }
 
     @SuppressWarnings("UnstableApiUsage")
     @Test
     @SneakyThrows
-    void capitalGainsCalculatorShouldGenerateCorrectReport() {
-        File reportsDir = new File(this.getClass().getClassLoader().getResource("interactive-brokers-activity-reports/").toURI());
+    void capitalGainsCalculatorShouldGenerateCorrectReportRate13() {
         File outputFile = Files.createTempFile("capital-gains-report-2020-", ".csv").toFile();
 
-        ApplicationProperties properties = ApplicationProperties.builder()
-                .year(2020)
-                .taxCurrency("RUB")
-                .taxRate(new BigDecimal("13.00"))
-                .taxTimeZone(ZoneId.of("+03"))
-                .reportDir(reportsDir)
-                .outputFile(outputFile)
-                .build();
+        var taxZone = ZoneId.of("+03");
+        var tradeProvider = TradeProviders.getByName("ib");
+        var rateProvider = RateProviders.getByBaseCurrency("RUB");
+        var reportGenerator = TaxReportGenerators.createByName("csv", rateProvider, new BigDecimal("13.00"), taxZone);
 
-        TradeProvider tradeProvider = new InteractiveBrokersTradeProvider(properties);
-        RateProvider rateProvider = new CbrRateProvider(CBR_HOST);
-        TaxReportGenerator reportGenerator = new DefaultTaxReportGenerator(properties, rateProvider);
+        new CapitalGainsCalculator(tradeProvider, reportGenerator)
+                .calculateTaxReport(new FileWriter(outputFile), taxZone, 2020, sources);
 
-        new CapitalGainsCalculatorApplication(properties, tradeProvider, reportGenerator).run();
-
-        String expectedReport = Resources.toString(Resources.getResource("capital-gains-tax-report.csv"), UTF_8);
+        String expectedReport = Resources.toString(Resources.getResource("capital-gains-tax-report-rate-13.csv"), UTF_8);
         String actualReport = Files.readString(outputFile.toPath());
         assertEquals(expectedReport, actualReport);
     }
+
+    @SuppressWarnings("UnstableApiUsage")
+    @Test
+    @SneakyThrows
+    void capitalGainsCalculatorShouldGenerateCorrectReportRate15() {
+        File outputFile = Files.createTempFile("capital-gains-report-2020-", ".csv").toFile();
+
+        var taxZone = ZoneId.of("+03");
+        var tradeProvider = TradeProviders.getByName("ib");
+        var rateProvider = RateProviders.getByBaseCurrency("RUB");
+        var reportGenerator = TaxReportGenerators.createByName("csv", rateProvider, new BigDecimal("15.00"), taxZone);
+
+        new CapitalGainsCalculator(tradeProvider, reportGenerator)
+                .calculateTaxReport(new FileWriter(outputFile), taxZone, 2020, sources);
+
+        String expectedReport = Resources.toString(Resources.getResource("capital-gains-tax-report-rate-15.csv"), UTF_8);
+        String actualReport = Files.readString(outputFile.toPath());
+        assertEquals(expectedReport, actualReport);
+    }
+
+    @SneakyThrows
+    private Reader createReportReader(File file) {
+        return new FileReader(file);
+    }
+
 }

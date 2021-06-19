@@ -1,4 +1,4 @@
-date,ticker,currency,country,quantity,conversion rate,gross,gross in RUB,tax rate,total tax in RUB,withhold by broker,withhold in RUB,yet to pay in RUB
+date,ticker,currency,country,quantity,conversion rate,gross,gross in tax currency,tax rate,total tax in tax currency,withhold by broker,withhold in tax currency,yet to pay in tax currency
 2020-04-04,BND,USD,US,25,77.7325,2.5,194.33125,13.00%,25.263062500,-0.03,-2.331975,22.931087500
 2020-06-12,VOO,USD,US,15,69.1219,29.65,2049.464335,13.00%,266.4303635500,-2.36,-163.127684,103.3026795500
 2020-12-18,VOO,USD,US,20,72.9781,47.24,3447.485444,13.00%,448.1731077200,-3.13,-228.421453,219.7516547200

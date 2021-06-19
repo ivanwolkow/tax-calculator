@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface TaxReportGenerator {
 
-    void generateReport(List<Gain> gains);
+    void generateReport(Appendable appendable, List<Gain> gains);
 }
