@@ -58,8 +58,7 @@ class CbrRateProviderTest {
     @Test
     void rateProviderMustPopulateCache() {
         CbrRateProvider rateProvider = new CbrRateProvider("http://localhost:4567");
-        wireMockServer.verify(1, getRequestedFor(UrlPattern.ANY));
-        wireMockServer.verify(1, getRequestedFor(urlPathEqualTo("/scripts/XML_valFull.asp")));
+        wireMockServer.verify(0, getRequestedFor(UrlPattern.ANY));
 
         BigDecimal rate1 = rateProvider.getRateByDateAndCurrency(LocalDate.of(2020, Month.JANUARY, 15), "USD");
         BigDecimal rate2 = rateProvider.getRateByDateAndCurrency(LocalDate.of(2020, Month.DECEMBER, 31), "USD");
@@ -67,6 +66,7 @@ class CbrRateProviderTest {
         assertEquals(new BigDecimal("61.4140"), rate1);
         assertEquals(new BigDecimal("73.8757"), rate2);
         wireMockServer.verify(2, getRequestedFor(UrlPattern.ANY));
+        wireMockServer.verify(1, getRequestedFor(urlPathEqualTo("/scripts/XML_valFull.asp")));
         wireMockServer.verify(1, getRequestedFor(urlPathEqualTo("/scripts/XML_dynamic.asp"))
                 .withQueryParam("date_req1", equalTo("01/01/2020"))
                 .withQueryParam("date_req2", equalTo("31/12/2020"))
@@ -89,13 +89,13 @@ class CbrRateProviderTest {
     @Test
     void rateProviderMustFetchLastAvailableRateWhenNoRateFound() {
         CbrRateProvider rateProvider = new CbrRateProvider("http://localhost:4567");
-        wireMockServer.verify(1, getRequestedFor(UrlPattern.ANY));
-        wireMockServer.verify(1, getRequestedFor(urlPathEqualTo("/scripts/XML_valFull.asp")));
+        wireMockServer.verify(0, getRequestedFor(UrlPattern.ANY));
 
         BigDecimal rate = rateProvider.getRateByDateAndCurrency(LocalDate.of(2020, Month.JANUARY, 2), "USD");
 
         assertEquals(new BigDecimal("61.9057"), rate);
         wireMockServer.verify(3, getRequestedFor(UrlPattern.ANY));
+        wireMockServer.verify(1, getRequestedFor(urlPathEqualTo("/scripts/XML_valFull.asp")));
         wireMockServer.verify(1, getRequestedFor(urlPathEqualTo("/scripts/XML_dynamic.asp"))
                 .withQueryParam("date_req1", equalTo("01/01/2020"))
                 .withQueryParam("date_req2", equalTo("31/12/2020"))

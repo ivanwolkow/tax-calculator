@@ -2,23 +2,29 @@ package com.wolkow.taxcalculator.rateprovider.enums;
 
 import one.util.streamex.StreamEx;
 
+import java.util.Map;
+import java.util.Objects;
+
+import static java.util.function.Function.identity;
+
 public enum RateProviderType {
-    CBR_RATE_PROVIDER("cbr"),
+    CBR_RATE_PROVIDER("RUB"),
     ;
 
-    private String shortName;
+    private String baseCurrency;
 
-    RateProviderType(String shortName) {
-        this.shortName = shortName;
+    private static Map<String, RateProviderType> providerByCurrency = StreamEx.of(RateProviderType.values())
+            .toMap(RateProviderType::getBaseCurrency, identity());
+
+    RateProviderType(String baseCurrency) {
+        this.baseCurrency = baseCurrency;
     }
 
-    public static RateProviderType findByShortName(String shortName) {
-        return StreamEx.of(RateProviderType.values())
-                .findFirst(tp -> tp.getShortName().equals(shortName))
-                .orElseThrow();
+    public static RateProviderType resolveByBaseCurrency(String baseCurrency) {
+        return Objects.requireNonNull(providerByCurrency.get(baseCurrency));
     }
 
-    public String getShortName() {
-        return shortName;
+    public String getBaseCurrency() {
+        return baseCurrency;
     }
 }

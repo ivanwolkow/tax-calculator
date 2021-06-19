@@ -1,8 +1,8 @@
 package com.wolkow.taxcalculator.dividend.properties;
 
-import com.wolkow.taxcalculator.dividend.enums.DivProviderType;
-import com.wolkow.taxcalculator.dividend.enums.TaxReportGeneratorType;
-import com.wolkow.taxcalculator.rateprovider.enums.RateProviderType;
+import com.wolkow.taxcalculator.dividend.divprovider.DivProvider;
+import com.wolkow.taxcalculator.dividend.taxreport.TaxReportGenerator;
+import com.wolkow.taxcalculator.rateprovider.RateProvider;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,14 +14,16 @@ import java.math.BigDecimal;
 public class ApplicationProperties {
 
     /* Common properties */
-    private Integer year;
-    private File reportDir;
-    private File outputFile;
-    private BigDecimal taxRate;
-    private String taxCurrency;
+    private final Integer year;
+    private final BigDecimal taxRate;
+    private final String taxCurrency;
 
-    /* Switching between different input/output formats */
-    private RateProviderType rateProvider;
-    private DivProviderType divProvider;
-    private TaxReportGeneratorType taxReportGenerator;
+    private final DivProvider divProvider;
+    private final RateProvider rateProvider;
+    private final TaxReportGenerator taxReportGenerator;
+
+    /* Properties required when using as CLI tool*/
+    private final File reportDir;
+    private final File outputFile;
+
 }

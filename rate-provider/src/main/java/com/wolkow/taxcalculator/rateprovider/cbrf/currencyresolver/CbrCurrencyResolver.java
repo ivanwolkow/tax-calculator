@@ -18,34 +18,51 @@ import org.simpleframework.xml.core.Persister;
 import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Loads currency mapping (for example USD -> R01235) from cbr service
- * http://www.cbr.ru/scripts/XML_valFull.asp
+ * (for example: http://www.cbr.ru/scripts/XML_valFull.asp)
+ * This implementation is thread-safe. All methods achieve their effects atomically using internal
+ * locks or other forms of concurrency control.
+ * This implementation supports lazy initialization.
  */
 @Slf4j
 public class CbrCurrencyResolver implements CurrencyResolver {
 
+    private final Object lock;
     private final HttpClient httpClient;
     private final Persister persister;
     private final Map<String, String> codeByName;
+    private final String cbrHost;
 
     @SneakyThrows
     public CbrCurrencyResolver(String cbrHost) {
+        this.lock = new Object();
+        this.cbrHost = cbrHost;
         this.persister = new Persister();
         this.httpClient = HttpClients.createDefault();
-        this.codeByName = loadCurrencyMapping(cbrHost);
+        this.codeByName = new ConcurrentHashMap<>();
     }
 
     @Override
     public String resolveCodeByName(String name) {
-        return Objects.requireNonNull(codeByName.get(name));
+        if (!codeByName.containsKey(name)) {
+            synchronized (lock) {
+                if (!codeByName.containsKey(name)) {
+                    loadCurrencyMapping(codeByName);
+                }
+            }
+        }
+
+        return Objects.requireNonNull(codeByName.get(name), "Unable to resolve currency + name");
     }
 
     @SneakyThrows
-    private Map<String, String> loadCurrencyMapping(String cbrHost) {
+    private void loadCurrencyMapping(Map<String, String> map) {
+        log.info("Loading currency mappings...");
         URI uri = new URIBuilder("/scripts/XML_valFull.asp").build();
 
         HttpResponse response = httpClient.execute(HttpHost.create(cbrHost), new HttpGet(uri));
@@ -53,15 +70,14 @@ public class CbrCurrencyResolver implements CurrencyResolver {
 
         XMLValFullResponse rs = persister.read(XMLValFullResponse.class, response.getEntity().getContent());
 
-        Map<String, String> map = StreamEx.of(rs.getItems())
+        StreamEx.of(rs.getItems())
                 .removeBy(XMLValFullItem::getIsoCharCode, null)
                 .filter(item -> Objects.equals(item.getId(), StringUtils.trim(item.getParentCode())))
                 .mapToEntry(XMLValFullItem::getIsoCharCode, XMLValFullItem::getParentCode)
                 .mapValues(String::trim)
-                .toImmutableMap();
+                .forKeyValue(map::put);
 
         log.info("Loaded currency mapping for {} currencies", map.size());
-        return map;
     }
 
 }

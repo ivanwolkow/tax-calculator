@@ -9,4 +9,6 @@ import java.time.LocalDate;
 public interface RateProvider {
 
     BigDecimal getRateByDateAndCurrency(LocalDate date, String currencyCode);
+
+    String getBaseCurrency();
 }

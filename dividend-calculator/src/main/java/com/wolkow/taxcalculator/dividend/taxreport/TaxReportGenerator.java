@@ -4,7 +4,9 @@ import com.wolkow.taxcalculator.dividend.model.Dividend;
 
 import java.util.List;
 
-public interface DivTaxReportGenerator {
+public interface TaxReportGenerator {
 
-    void generateReport(List<Dividend> dividends);
+    void generateReport(Appendable appendable, List<Dividend> dividends);
+
+    String getName();
 }

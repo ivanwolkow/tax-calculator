@@ -2,7 +2,6 @@ package com.wolkow.taxcalculator.capitalgains.taxreport;
 
 import com.wolkow.taxcalculator.capitalgains.model.Gain;
 import com.wolkow.taxcalculator.capitalgains.model.Trade;
-import com.wolkow.taxcalculator.capitalgains.properties.ApplicationProperties;
 import com.wolkow.taxcalculator.rateprovider.RateProvider;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -10,67 +9,63 @@ import one.util.streamex.StreamEx;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
-import java.io.FileWriter;
 import java.math.BigDecimal;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static java.math.BigDecimal.ZERO;
 import static java.math.RoundingMode.UP;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.LF;
 
 @Slf4j
-public class DefaultTaxReportGenerator implements TaxReportGenerator {
+public class CsvTaxReportGenerator implements TaxReportGenerator {
 
-    private final ApplicationProperties properties;
     private final RateProvider rateProvider;
+    private final BigDecimal taxRate;
+    private final ZoneId taxZone;
 
-    public DefaultTaxReportGenerator(ApplicationProperties properties,
-                                     RateProvider rateProvider) {
-        this.properties = properties;
+    public CsvTaxReportGenerator(RateProvider rateProvider, BigDecimal taxRate, ZoneId taxZone) {
         this.rateProvider = rateProvider;
+        this.taxRate = taxRate;
+        this.taxZone = taxZone;
     }
 
     @Override
     @SneakyThrows
-    public void generateReport(List<Gain> gains) {
-        var output = properties.getOutputFile();
-        output.getParentFile().mkdirs();
-
-        var printer = new CSVPrinter(new FileWriter(output, UTF_8),
-                CSVFormat.DEFAULT.withRecordSeparator(LF));
+    public void generateReport(Appendable appendable, List<Gain> gains) {
+        var printer = new CSVPrinter(appendable, CSVFormat.DEFAULT.withRecordSeparator(LF));
 
         printer.printRecord(
-                "txn time",
+                "txn time in tax timezone",
                 "ticker",
                 "txn currency",
                 "price per share",
                 "quantity",
                 "txn total",
                 "txn conversion rate",
-                "txn in " + properties.getTaxCurrency(),
+                "txn in tax currency",
                 "fee",
                 "fee currency",
                 "fee conversion rate",
-                "fee in " + properties.getTaxCurrency(),
-                "total in " + properties.getTaxCurrency()
+                "fee in tax currency",
+                "total in tax currency"
         );
 
         BigDecimal totalInTaxCurrency = StreamEx.of(gains)
-                .map(gain -> processGain(gain, printer))
+                .map(gain -> processGain(gain, rateProvider, printer))
                 .reduce(ZERO, BigDecimal::add);
 
         BigDecimal taxToPay = (totalInTaxCurrency.compareTo(ZERO) <= 0)
                 ? ZERO
-                : totalInTaxCurrency.multiply(properties.getTaxRate()).scaleByPowerOfTen(-2);
+                : totalInTaxCurrency.multiply(taxRate).scaleByPowerOfTen(-2);
 
         printer.printRecord(createRecord("TOTAL PROFIT", emptyFields(11),
                 totalInTaxCurrency.setScale(2, UP)));
 
-        printer.printRecord(createRecord("TAX RATE", emptyFields(11), properties.getTaxRate() + "%"));
+        printer.printRecord(createRecord("TAX RATE", emptyFields(11), taxRate + "%"));
 
         printer.printRecord(createRecord("TAX TO PAY", emptyFields(11),
                 taxToPay.setScale(2, UP)));
@@ -78,17 +73,16 @@ public class DefaultTaxReportGenerator implements TaxReportGenerator {
         printer.flush();
         printer.close();
 
-        log.info("Total capital gains tax yet to pay: {}", taxToPay.setScale(2, UP));
-        log.info("Capital gains report {} has been successfully generated\n", properties.getOutputFile());
+        log.info("Report successfully generated. Total capital gains tax yet to pay: {}", taxToPay.setScale(2, UP));
     }
 
     @SneakyThrows
-    private BigDecimal processGain(Gain gain, CSVPrinter printer) {
+    private BigDecimal processGain(Gain gain, RateProvider rateProvider, CSVPrinter printer) {
         BigDecimal totalBuyInTaxCurrency = StreamEx.of(gain.getBuys())
-                .map(buy -> processTradeEntry(buy, printer))
+                .map(buy -> processTradeEntry(buy, rateProvider, printer))
                 .reduce(ZERO, BigDecimal::add);
 
-        BigDecimal totalSellInTaxCurrency = processTradeEntry(gain.getSell(), printer);
+        BigDecimal totalSellInTaxCurrency = processTradeEntry(gain.getSell(), rateProvider, printer);
         BigDecimal totalInTaxCurrency = totalBuyInTaxCurrency.add(totalSellInTaxCurrency);
 
         printer.printRecord(createRecord("TOTAL", emptyFields(11), totalInTaxCurrency));
@@ -98,18 +92,18 @@ public class DefaultTaxReportGenerator implements TaxReportGenerator {
     }
 
     @SneakyThrows
-    private BigDecimal processTradeEntry(Trade trade, CSVPrinter printer) {
+    private BigDecimal processTradeEntry(Trade trade, RateProvider rateProvider, CSVPrinter printer) {
         BigDecimal transaction = trade.getPricePerShare().multiply(new BigDecimal(trade.getQuantity())).negate();
-        BigDecimal transactionRate = rateProvider.getRateByDateAndCurrency(trade.getTime().toLocalDate(), trade.getCurrency());
+        BigDecimal transactionRate = rateProvider.getRateByDateAndCurrency(trade.getTime().atZone(taxZone).toLocalDate(), trade.getCurrency());
         BigDecimal transactionInTaxCurrency = transaction.multiply(transactionRate);
 
-        BigDecimal feeRate = rateProvider.getRateByDateAndCurrency(trade.getTime().toLocalDate(), trade.getFeeCurrency());
+        BigDecimal feeRate = rateProvider.getRateByDateAndCurrency(trade.getTime().atZone(taxZone).toLocalDate(), trade.getFeeCurrency());
         BigDecimal feeInTaxCurrency = trade.getFee().multiply(feeRate);
 
         BigDecimal totalInTaxCurrency = transactionInTaxCurrency.add(feeInTaxCurrency);
 
         printer.printRecord(
-                trade.getTime(),
+                trade.getTime().atZone(taxZone),
                 trade.getTicker(),
                 trade.getCurrency(),
                 trade.getPricePerShare(),

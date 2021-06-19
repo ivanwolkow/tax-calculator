@@ -1,0 +1,5 @@
+date,ticker,currency,country,quantity,conversion rate,gross,gross in tax currency,tax rate,total tax in tax currency,withhold by broker,withhold in tax currency,yet to pay in tax currency
+2020-04-04,BND,USD,US,25,77.7325,2.5,194.33125,15.00%,29.149687500,-0.03,-2.331975,26.817712500
+2020-06-12,VOO,USD,US,15,69.1219,29.65,2049.464335,15.00%,307.4196502500,-2.36,-163.127684,144.2919662500
+2020-12-18,VOO,USD,US,20,72.9781,47.24,3447.485444,15.00%,517.1228166000,-3.13,-228.421453,288.7013636000
+TOTAL,,,,,,,,,,,,459.82

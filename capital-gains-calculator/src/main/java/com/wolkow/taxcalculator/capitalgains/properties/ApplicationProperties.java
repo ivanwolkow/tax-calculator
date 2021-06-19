@@ -1,8 +1,8 @@
 package com.wolkow.taxcalculator.capitalgains.properties;
 
-import com.wolkow.taxcalculator.capitalgains.enums.TaxReportGeneratorType;
-import com.wolkow.taxcalculator.capitalgains.enums.TradeProviderType;
-import com.wolkow.taxcalculator.rateprovider.enums.RateProviderType;
+import com.wolkow.taxcalculator.capitalgains.taxreport.TaxReportGenerator;
+import com.wolkow.taxcalculator.capitalgains.tradeprovider.TradeProvider;
+import com.wolkow.taxcalculator.rateprovider.RateProvider;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,15 +15,17 @@ import java.time.ZoneId;
 public class ApplicationProperties {
 
     /* Common properties */
-    private Integer year;
-    private File reportDir;
-    private File outputFile;
-    private BigDecimal taxRate;
-    private String taxCurrency;
-    private ZoneId taxTimeZone;
+    private final Integer year;
+    private final BigDecimal taxRate;
+    private final String taxCurrency;
+    private final ZoneId taxTimeZone;
 
-    /* Switching between different input/output formats */
-    private RateProviderType rateProvider;
-    private TradeProviderType tradeProvider;
-    private TaxReportGeneratorType taxReportGenerator;
+    private final TradeProvider tradeProvider;
+    private final TaxReportGenerator taxReportGenerator;
+    private final RateProvider rateProvider;
+
+    /* Properties required when using as CLI tool*/
+    private final File reportDir;
+    private final File outputFile;
+
 }

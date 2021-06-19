@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -14,7 +14,7 @@ public class Trade {
     private String assetCategory;
     private String currency;
     private String ticker;
-    private LocalDateTime time;         //transaction time (in tax timezone)
+    private Instant time;         //transaction time
     private BigDecimal pricePerShare;   //always positive
     private int quantity;               //positive for buys, negative for sells
     private BigDecimal fee;             //negative value

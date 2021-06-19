@@ -2,6 +2,7 @@ package com.wolkow.taxcalculator.capitalgains.tradeprovider;
 
 import com.wolkow.taxcalculator.capitalgains.model.Trade;
 
+import java.io.Reader;
 import java.util.Collection;
 
 /**
@@ -11,7 +12,8 @@ import java.util.Collection;
  */
 public interface TradeProvider {
 
-    Collection<Trade> readTrades();
+    Collection<Trade> readTrades(Reader... readers);
 
+    String getName();
 
 }
