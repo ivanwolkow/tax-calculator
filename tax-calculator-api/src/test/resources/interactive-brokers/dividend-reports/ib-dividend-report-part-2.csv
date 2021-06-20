@@ -1,0 +1,2 @@
+DividendDetail,Header,DataDiscriminator,Currency,Symbol,Conid,Country,ReportDate,ExDate,Shares,RevenueComponent,QualifiedIndicator,Gross,GrossInBase,GrossInUSD,Withhold,WithholdInBase,WithholdInUSD
+DividendDetail,Data,Summary,USD,BND,43645828,US,20200404,20200401,25,,,2.5,2.5,2.5,-0.03,-0.03,-0.03,

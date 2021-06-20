@@ -1,8 +1,8 @@
 package com.wolkow.taxcalculator.capitalgains;
 
 import com.wolkow.taxcalculator.capitalgains.properties.ApplicationProperties;
-import com.wolkow.taxcalculator.capitalgains.taxreport.TaxReportGenerator;
-import com.wolkow.taxcalculator.capitalgains.taxreport.TaxReportGenerators;
+import com.wolkow.taxcalculator.capitalgains.taxreport.ReportGenerator;
+import com.wolkow.taxcalculator.capitalgains.taxreport.ReportGenerators;
 import com.wolkow.taxcalculator.capitalgains.tradeprovider.TradeProvider;
 import com.wolkow.taxcalculator.capitalgains.tradeprovider.TradeProviders;
 import com.wolkow.taxcalculator.rateprovider.RateProvider;
@@ -41,8 +41,8 @@ public class CapitalGainsCalculatorApplication {
         outputFile.getParentFile().mkdirs();
         FileWriter destination = new FileWriter(outputFile, UTF_8);
 
-        new CapitalGainsCalculator(props.getTradeProvider(), props.getTaxReportGenerator())
-                .calculateTaxReport(destination, props.getTaxTimeZone(), props.getYear(), sources);
+        new CapitalGainsCalculator(props.getTradeProvider(), props.getReportGenerator())
+                .generateReport(destination, props.getTaxTimeZone(), props.getYear(), sources);
     }
 
     @SneakyThrows
@@ -72,7 +72,7 @@ public class CapitalGainsCalculatorApplication {
         BigDecimal taxRate = new BigDecimal(p.getOptionValue("tr", "13.00"));
         TradeProvider tradeProvider = TradeProviders.getByName(p.getOptionValue("tp", "ib"));
         RateProvider rateProvider = RateProviders.getByBaseCurrency(taxCurrency);
-        TaxReportGenerator reportGenerator = TaxReportGenerators.createByName(p.getOptionValue("rg", "csv"), rateProvider, taxRate, taxZone);
+        ReportGenerator reportGenerator = ReportGenerators.createByName(p.getOptionValue("rg", "csv"), rateProvider, taxRate, taxZone);
 
         return ApplicationProperties.builder()
                 .reportDir(new File(p.getOptionValue("i", "./")))
@@ -82,7 +82,7 @@ public class CapitalGainsCalculatorApplication {
                 .taxCurrency(taxCurrency)
                 .taxTimeZone(taxZone)
                 .tradeProvider(tradeProvider)
-                .taxReportGenerator(reportGenerator)
+                .reportGenerator(reportGenerator)
                 .build();
     }
 

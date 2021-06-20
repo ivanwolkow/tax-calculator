@@ -1,0 +1,3 @@
+DividendDetail,Header,DataDiscriminator,Currency,Symbol,Conid,Country,ReportDate,ExDate,Shares,RevenueComponent,QualifiedIndicator,Gross,GrossInBase,GrossInUSD,Withhold,WithholdInBase,WithholdInUSD
+DividendDetail,Data,Summary,USD,VOO,136155102,US,20200612,20200605,15,,,29.65,29.65,29.65,-2.36,-2.36,-2.36,
+DividendDetail,Data,Summary,USD,VOO,136155102,US,20201218,20201212,20,,,47.24,47.24,47.24,-3.13,-4.13,-4.13,

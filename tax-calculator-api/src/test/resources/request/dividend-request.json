@@ -1,0 +1,7 @@
+{
+  "taxYear": "2020",
+  "taxCurrency": "RUB",
+  "taxRate": "13.00",
+  "brokerType": "ib",
+  "reportType": "csv"
+}

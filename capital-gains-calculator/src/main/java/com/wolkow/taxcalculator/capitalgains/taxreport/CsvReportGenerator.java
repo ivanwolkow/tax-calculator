@@ -21,13 +21,13 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.LF;
 
 @Slf4j
-public class CsvTaxReportGenerator implements TaxReportGenerator {
+public class CsvReportGenerator implements ReportGenerator {
 
     private final RateProvider rateProvider;
     private final BigDecimal taxRate;
     private final ZoneId taxZone;
 
-    public CsvTaxReportGenerator(RateProvider rateProvider, BigDecimal taxRate, ZoneId taxZone) {
+    public CsvReportGenerator(RateProvider rateProvider, BigDecimal taxRate, ZoneId taxZone) {
         this.rateProvider = rateProvider;
         this.taxRate = taxRate;
         this.taxZone = taxZone;

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Contract for generating tax report based on list of {@link com.wolkow.taxcalculator.capitalgains.model.Gain gains}
  */
-public interface TaxReportGenerator {
+public interface ReportGenerator {
 
     void generateReport(Appendable appendable, List<Gain> gains);
 }
