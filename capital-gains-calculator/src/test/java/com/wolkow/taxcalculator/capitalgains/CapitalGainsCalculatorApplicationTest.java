@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.google.common.io.Resources;
-import com.wolkow.taxcalculator.capitalgains.taxreport.TaxReportGenerators;
+import com.wolkow.taxcalculator.capitalgains.taxreport.ReportGenerators;
 import com.wolkow.taxcalculator.capitalgains.tradeprovider.TradeProviders;
 import com.wolkow.taxcalculator.rateprovider.RateProviders;
 import lombok.SneakyThrows;
@@ -89,10 +89,10 @@ class CapitalGainsCalculatorApplicationTest {
         var taxZone = ZoneId.of("+03");
         var tradeProvider = TradeProviders.getByName("ib");
         var rateProvider = RateProviders.getByBaseCurrency("RUB");
-        var reportGenerator = TaxReportGenerators.createByName("csv", rateProvider, new BigDecimal("13.00"), taxZone);
+        var reportGenerator = ReportGenerators.createByName("csv", rateProvider, new BigDecimal("13.00"), taxZone);
 
         new CapitalGainsCalculator(tradeProvider, reportGenerator)
-                .calculateTaxReport(new FileWriter(outputFile), taxZone, 2020, sources);
+                .generateReport(new FileWriter(outputFile), taxZone, 2020, sources);
 
         String expectedReport = Resources.toString(Resources.getResource("capital-gains-tax-report-rate-13.csv"), UTF_8);
         String actualReport = Files.readString(outputFile.toPath());
@@ -108,10 +108,10 @@ class CapitalGainsCalculatorApplicationTest {
         var taxZone = ZoneId.of("+03");
         var tradeProvider = TradeProviders.getByName("ib");
         var rateProvider = RateProviders.getByBaseCurrency("RUB");
-        var reportGenerator = TaxReportGenerators.createByName("csv", rateProvider, new BigDecimal("15.00"), taxZone);
+        var reportGenerator = ReportGenerators.createByName("csv", rateProvider, new BigDecimal("15.00"), taxZone);
 
         new CapitalGainsCalculator(tradeProvider, reportGenerator)
-                .calculateTaxReport(new FileWriter(outputFile), taxZone, 2020, sources);
+                .generateReport(new FileWriter(outputFile), taxZone, 2020, sources);
 
         String expectedReport = Resources.toString(Resources.getResource("capital-gains-tax-report-rate-15.csv"), UTF_8);
         String actualReport = Files.readString(outputFile.toPath());

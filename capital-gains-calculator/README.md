@@ -31,9 +31,13 @@ Format: CSV
 Language: English
 ```
 
-Please notice that it is required to download activity reports with all the buy/sell operations since the account opening date!
+Please notice that it is required to download activity reports with all the buy/sell operations since the account opening date.
 
-## Build
+## Build and run
+
+Below you can find instructions on how to use this tool as a standalone CLI application. For using as web service, please
+go to [web api](../tax-calculator-api) page.
+
 ```bash
 ./gradlew shadowJar
 ```
@@ -42,7 +46,6 @@ For a convenience, let's export path to a jar file to env variable:
 export CG_JAR=`pwd`/capital-gains-calculator/build/libs/capital-gains-calculator-0.0.1-SNAPSHOT-all.jar
 ```
 
-## Run
 Typical usage example:
 ```bash
 java -jar $CG_JAR --in ./activity-reports/ --out ./capital-gains-tax-report.csv --tax-currency RUB --tax-rate 13 --tax-tz +03 --year 2020

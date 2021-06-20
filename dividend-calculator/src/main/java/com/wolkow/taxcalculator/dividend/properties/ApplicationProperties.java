@@ -1,7 +1,7 @@
 package com.wolkow.taxcalculator.dividend.properties;
 
 import com.wolkow.taxcalculator.dividend.divprovider.DivProvider;
-import com.wolkow.taxcalculator.dividend.taxreport.TaxReportGenerator;
+import com.wolkow.taxcalculator.dividend.taxreport.ReportGenerator;
 import com.wolkow.taxcalculator.rateprovider.RateProvider;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class ApplicationProperties {
 
     private final DivProvider divProvider;
     private final RateProvider rateProvider;
-    private final TaxReportGenerator taxReportGenerator;
+    private final ReportGenerator reportGenerator;
 
     /* Properties required when using as CLI tool*/
     private final File reportDir;

@@ -3,7 +3,7 @@ package com.wolkow.taxcalculator.capitalgains;
 import com.google.common.base.Preconditions;
 import com.wolkow.taxcalculator.capitalgains.model.Gain;
 import com.wolkow.taxcalculator.capitalgains.model.Trade;
-import com.wolkow.taxcalculator.capitalgains.taxreport.TaxReportGenerator;
+import com.wolkow.taxcalculator.capitalgains.taxreport.ReportGenerator;
 import com.wolkow.taxcalculator.capitalgains.tradeprovider.TradeProvider;
 import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
@@ -19,17 +19,17 @@ import static java.util.Objects.requireNonNull;
 public class CapitalGainsCalculator {
 
     private final TradeProvider tradeProvider;
-    private final TaxReportGenerator reportGenerator;
+    private final ReportGenerator reportGenerator;
 
     public CapitalGainsCalculator(TradeProvider tradeProvider,
-                                  TaxReportGenerator reportGenerator) {
+                                  ReportGenerator reportGenerator) {
 
         this.tradeProvider = tradeProvider;
         this.reportGenerator = reportGenerator;
     }
 
-    public void calculateTaxReport(Appendable destination, ZoneId taxZone, Integer taxYear, Reader... sources) {
-        log.info("Collecting buys and sells...");
+    public void generateReport(Appendable destination, ZoneId taxZone, Integer taxYear, Reader... sources) {
+        log.debug("Collecting buys and sells...");
         Collection<Trade> tradeList = tradeProvider.readTrades(sources);
 
         Map<String, LinkedList<Trade>> buysByTicker = StreamEx.of(tradeList)
@@ -37,7 +37,7 @@ public class CapitalGainsCalculator {
                 .sorted(Comparator.comparing(Trade::getTime))
                 .groupingBy(Trade::getTicker, Collectors.toCollection(LinkedList::new));
 
-        buysByTicker.forEach((ticker, buys) -> log.info("{}: {} buys", ticker, buys.size()));
+        buysByTicker.forEach((ticker, buys) -> log.trace("{}: {} buys", ticker, buys.size()));
 
         List<Gain> gains = StreamEx.of(tradeList)
                 .filter(trade -> trade.getQuantity() < 0)
@@ -47,8 +47,8 @@ public class CapitalGainsCalculator {
                 .filter(gain -> gain.getSell().getTime().atZone(taxZone).getYear() == taxYear)
                 .toList();
 
-        log.info("Found {} sells in year {}. Lot-Matching result:", gains.size(), taxYear);
-        gains.forEach(gain -> log.info(gain.toString()));
+        log.debug("Found {} sells in year {}. Lot-Matching result:", gains.size(), taxYear);
+        gains.forEach(gain -> log.debug(gain.toString()));
 
         reportGenerator.generateReport(destination, gains);
     }

@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.google.common.io.Resources;
 import com.wolkow.taxcalculator.dividend.divprovider.DivProviders;
-import com.wolkow.taxcalculator.dividend.taxreport.TaxReportGenerators;
+import com.wolkow.taxcalculator.dividend.taxreport.ReportGenerators;
 import com.wolkow.taxcalculator.rateprovider.RateProviders;
 import lombok.SneakyThrows;
 import one.util.streamex.StreamEx;
@@ -87,10 +87,10 @@ class DividendCalculatorApplicationTest {
         var taxRate = new BigDecimal("13.00");
         var divProvider = DivProviders.getByName("ib");
         var rateProvider = RateProviders.getByBaseCurrency("RUB");
-        var reportGenerator = TaxReportGenerators.createByName("csv", rateProvider, taxRate);
+        var reportGenerator = ReportGenerators.createByName("csv", rateProvider, taxRate);
 
         new DividendCalculator(divProvider, reportGenerator)
-                .generateTaxReport(new FileWriter(outputFile), 2020, sources);
+                .generateReport(new FileWriter(outputFile), 2020, sources);
 
         String expectedReport = Resources.toString(Resources.getResource("dividend-tax-report-rate-13.csv"), UTF_8);
         String actualReport = Files.readString(outputFile.toPath());
@@ -105,10 +105,10 @@ class DividendCalculatorApplicationTest {
         var taxRate = new BigDecimal("15.00");
         var divProvider = DivProviders.getByName("ib");
         var rateProvider = RateProviders.getByBaseCurrency("RUB");
-        var reportGenerator = TaxReportGenerators.createByName("csv", rateProvider, taxRate);
+        var reportGenerator = ReportGenerators.createByName("csv", rateProvider, taxRate);
 
         new DividendCalculator(divProvider, reportGenerator)
-                .generateTaxReport(new FileWriter(outputFile), 2020, sources);
+                .generateReport(new FileWriter(outputFile), 2020, sources);
 
         String expectedReport = Resources.toString(Resources.getResource("dividend-tax-report-rate-15.csv"), UTF_8);
         String actualReport = Files.readString(outputFile.toPath());

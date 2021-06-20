@@ -1,6 +1,6 @@
 package com.wolkow.taxcalculator.capitalgains.properties;
 
-import com.wolkow.taxcalculator.capitalgains.taxreport.TaxReportGenerator;
+import com.wolkow.taxcalculator.capitalgains.taxreport.ReportGenerator;
 import com.wolkow.taxcalculator.capitalgains.tradeprovider.TradeProvider;
 import com.wolkow.taxcalculator.rateprovider.RateProvider;
 import lombok.Builder;
@@ -21,7 +21,7 @@ public class ApplicationProperties {
     private final ZoneId taxTimeZone;
 
     private final TradeProvider tradeProvider;
-    private final TaxReportGenerator taxReportGenerator;
+    private final ReportGenerator reportGenerator;
     private final RateProvider rateProvider;
 
     /* Properties required when using as CLI tool*/

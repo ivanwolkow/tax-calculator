@@ -17,7 +17,11 @@ These reports can be downloaded from [Interactive Brokers website](https://www.i
 under "Reports" -> "Tax documents" -> "Tax Information Statements for [year]" -> "Dividend Report" (CSV).
 
 
-## Build
+## Build and run
+
+Below you can find instructions on how to use this tool as a standalone CLI application. For using as web service, please
+go to [web api](../tax-calculator-api) page.
+
 ```bash
 ./gradlew shadowJar
 ```
@@ -26,7 +30,6 @@ For a convenience, let's export path to a jar file to env variable:
 export DIV_JAR=`pwd`/dividend-calculator/build/libs/dividend-calculator-0.0.1-SNAPSHOT-all.jar
 ```
 
-## Run
 Typical usage example:
 ```bash
 java -jar DIV_JAR --in ./dividend-reports/ --out ./dividend-tax-report.csv --tax-currency RUB --tax-rate 13 --year 2020

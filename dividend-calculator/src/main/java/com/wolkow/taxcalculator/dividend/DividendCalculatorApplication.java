@@ -3,8 +3,8 @@ package com.wolkow.taxcalculator.dividend;
 import com.wolkow.taxcalculator.dividend.divprovider.DivProvider;
 import com.wolkow.taxcalculator.dividend.divprovider.DivProviders;
 import com.wolkow.taxcalculator.dividend.properties.ApplicationProperties;
-import com.wolkow.taxcalculator.dividend.taxreport.TaxReportGenerator;
-import com.wolkow.taxcalculator.dividend.taxreport.TaxReportGenerators;
+import com.wolkow.taxcalculator.dividend.taxreport.ReportGenerator;
+import com.wolkow.taxcalculator.dividend.taxreport.ReportGenerators;
 import com.wolkow.taxcalculator.rateprovider.RateProvider;
 import com.wolkow.taxcalculator.rateprovider.RateProviders;
 import lombok.SneakyThrows;
@@ -40,8 +40,8 @@ public class DividendCalculatorApplication {
         outputFile.getParentFile().mkdirs();
         FileWriter destination = new FileWriter(outputFile, UTF_8);
 
-        new DividendCalculator(props.getDivProvider(), props.getTaxReportGenerator())
-                .generateTaxReport(destination, props.getYear(), sources);
+        new DividendCalculator(props.getDivProvider(), props.getReportGenerator())
+                .generateReport(destination, props.getYear(), sources);
 
         log.info("Dividend report {} has been successfully generated\n", props.getOutputFile());
     }
@@ -71,7 +71,7 @@ public class DividendCalculatorApplication {
         BigDecimal taxRate = new BigDecimal(p.getOptionValue("tr", "13.00"));
         RateProvider rateProvider = RateProviders.getByBaseCurrency(taxCurrency);
         DivProvider divProvider = DivProviders.getByName(p.getOptionValue("dp", "ib"));
-        TaxReportGenerator reportGenerator = TaxReportGenerators.createByName(p.getOptionValue("rg", "csv"), rateProvider, taxRate);
+        ReportGenerator reportGenerator = ReportGenerators.createByName(p.getOptionValue("rg", "csv"), rateProvider, taxRate);
 
         return ApplicationProperties.builder()
                 .reportDir(new File(p.getOptionValue("i", "./")))
@@ -81,7 +81,7 @@ public class DividendCalculatorApplication {
                 .taxCurrency(taxCurrency)
                 .divProvider(divProvider)
                 .rateProvider(rateProvider)
-                .taxReportGenerator(reportGenerator)
+                .reportGenerator(reportGenerator)
                 .build();
     }
 

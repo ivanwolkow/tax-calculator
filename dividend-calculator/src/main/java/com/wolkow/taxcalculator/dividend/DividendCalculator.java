@@ -2,7 +2,7 @@ package com.wolkow.taxcalculator.dividend;
 
 import com.wolkow.taxcalculator.dividend.divprovider.DivProvider;
 import com.wolkow.taxcalculator.dividend.model.Dividend;
-import com.wolkow.taxcalculator.dividend.taxreport.TaxReportGenerator;
+import com.wolkow.taxcalculator.dividend.taxreport.ReportGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -16,19 +16,19 @@ import java.util.List;
 public class DividendCalculator {
 
     private final DivProvider divProvider;
-    private final TaxReportGenerator reportGenerator;
+    private final ReportGenerator reportGenerator;
 
     @SneakyThrows
-    public void generateTaxReport(Appendable destination, Integer taxYear, Reader... sources) {
-        log.info("Searching for dividend accruals...");
+    public void generateReport(Appendable destination, Integer taxYear, Reader... sources) {
+        log.debug("Searching for dividend accruals...");
 
         List<Dividend> dividends = StreamEx.of(divProvider.readDivs(sources))
                 .filterBy(div -> div.getDate().getYear(), taxYear)
                 .sortedBy(Dividend::getDate)
                 .toList();
 
-        log.info("Found {} dividends in year {}", dividends.size(), taxYear);
-        dividends.forEach(div -> log.info(div.toString()));
+        log.debug("Found {} dividends in year {}", dividends.size(), taxYear);
+        dividends.forEach(div -> log.debug(div.toString()));
 
         reportGenerator.generateReport(destination, dividends);
     }
