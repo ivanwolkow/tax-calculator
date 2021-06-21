@@ -7,4 +7,5 @@ Currently, project consists of two parts:
 * [capital gains calculator](./capital-gains-calculator)  (whenever you sell an asset you need to pay income tax in respect of the profit)
 * [dividend calculator](./dividend-calculator) (even if you don't sell anything you still might receive a taxable dividend as a shareholder)
 
-You can use these tools either as standalone CLI application or via [web api](./tax-calculator-api).
+You can use these tools either as standalone CLI application or via [tax-calculator-api](./tax-calculator-api) 
+which is deployed to **Amazon ECS Fargate cluster** by means of Github CI/CD.
