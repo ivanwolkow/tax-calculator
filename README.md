@@ -8,4 +8,4 @@ Currently, project consists of two parts:
 * [dividend calculator](./dividend-calculator) (even if you don't sell anything you still might receive a taxable dividend as a shareholder)
 
 You can use these tools either as standalone CLI application or via [tax-calculator-api](./tax-calculator-api) 
-which is deployed to **Amazon ECS Fargate cluster** by means of Github CI/CD.
+which is deployed to a cloud application platform.

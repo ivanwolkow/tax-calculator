@@ -2,10 +2,10 @@
 
 This module provides a web interface for [capital gains calcualator](../capital-gains-calculator) and [dividend calculator](../dividend-calculator).
 
-This service is deployed to **Amazon ECS Fargate cluster** 
-and is externally available at 3.143.159.123 on port 10101.
-Example: [http://3.143.159.123:10101/healthcheck](http://3.143.159.123:10101/healthcheck).
-Deployment process is fully automated by means of configured Github CI/CD (Github actions).
+Currently, the following deployments are configured for this service:
+* **Amazon ECS Fargate cluster** : ~~http://3.143.159.123:10101/healthcheck~~ (currently is down due to relatively high Amazon fees for a load balancer usage)
+* **Heroku** cloud application platform: https://tax-calculator-api.herokuapp.com/healthcheck 
+  (the free tier is used so accessing this endpoint may take a while since the heroku puts the dyno asleep after 30 minutes of inactivity)
 
 ## Build and run
 Build an executable jar with the command:
