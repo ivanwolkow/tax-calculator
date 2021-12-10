@@ -24,7 +24,11 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.math.BigDecimal.ONE;
 import static java.time.Month.DECEMBER;
@@ -53,7 +57,7 @@ public class CbrRateProvider implements RateProvider {
     public CbrRateProvider(String cbrHost) {
         this.cbrHost = cbrHost;
         this.xmlPersister = new Persister(new CbrXmlMatcher());
-        this.cache = new HashMap<>();
+        this.cache = new ConcurrentHashMap<>();
         this.httpClient = HttpClients.createDefault();
         this.currencyResolver = new CbrCurrencyResolver(cbrHost);
     }
