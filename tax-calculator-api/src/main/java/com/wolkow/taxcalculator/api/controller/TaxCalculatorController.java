@@ -35,7 +35,8 @@ public class TaxCalculatorController {
                                            @RequestPart("reportFiles") MultipartFile[] reportFiles,
                                            HttpServletResponse response) {
 
-        log.debug("Capital gains report request: {}, files: {}", rq, StreamEx.of(reportFiles).map(MultipartFile::getOriginalFilename).toList());
+        log.debug("Capital gains report request: {}, files: {}", rq,
+                StreamEx.of(reportFiles).map(MultipartFile::getOriginalFilename).toList());
 
         PrintWriter writer = response.getWriter();
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
@@ -54,7 +55,8 @@ public class TaxCalculatorController {
                                            @RequestPart("reportFiles") MultipartFile[] reportFiles,
                                            HttpServletResponse response) {
 
-        log.debug("Dividend report request: {}, files: {}", rq, StreamEx.of(reportFiles).map(MultipartFile::getOriginalFilename).toList());
+        log.debug("Dividend report request: {}, files: {}", rq,
+                StreamEx.of(reportFiles).map(MultipartFile::getOriginalFilename).toList());
 
         PrintWriter writer = response.getWriter();
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,

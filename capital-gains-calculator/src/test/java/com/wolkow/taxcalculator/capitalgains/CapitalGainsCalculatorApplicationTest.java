@@ -23,6 +23,7 @@ import java.time.ZoneId;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.ArrayUtils.toArray;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
@@ -63,11 +64,11 @@ class CapitalGainsCalculatorApplicationTest {
 
     @BeforeEach
     @SneakyThrows
+    @SuppressWarnings("UnstableApiUsage")
     void setUp() {
         wireMockServer.resetRequests();
-
-        File reportsDir = new File(this.getClass().getClassLoader().getResource("interactive-brokers-activity-reports/").toURI());
-        sources = StreamEx.of(FileUtils.listFiles(reportsDir, new String[]{"csv"}, false))
+        File reportsDir = new File(Resources.getResource("interactive-brokers-activity-reports/").toURI());
+        sources = StreamEx.of(FileUtils.listFiles(reportsDir, toArray("csv"), false))
                 .map(this::createReportReader)
                 .toArray(Reader.class);
     }
