@@ -6,6 +6,8 @@ import com.wolkow.taxcalculator.rateprovider.cbrf.currencyresolver.CbrCurrencyRe
 import com.wolkow.taxcalculator.rateprovider.cbrf.currencyresolver.CurrencyResolver;
 import com.wolkow.taxcalculator.rateprovider.cbrf.model.CbrRateRecord;
 import com.wolkow.taxcalculator.rateprovider.cbrf.model.CbrRateResponse;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
@@ -30,6 +32,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static io.github.resilience4j.retry.Retry.decorateCheckedSupplier;
 import static java.math.BigDecimal.ONE;
 import static java.time.Month.DECEMBER;
 import static java.time.Month.JANUARY;
@@ -53,6 +56,7 @@ public class CbrRateProvider implements RateProvider {
     private final HttpClient httpClient;
     private final String cbrHost;
     private final CurrencyResolver currencyResolver;
+    private final Retry retry;
 
     public CbrRateProvider(String cbrHost) {
         this.cbrHost = cbrHost;
@@ -60,6 +64,7 @@ public class CbrRateProvider implements RateProvider {
         this.cache = new ConcurrentHashMap<>();
         this.httpClient = HttpClients.createDefault();
         this.currencyResolver = new CbrCurrencyResolver(cbrHost);
+        this.retry = Retry.of("cbrf-retry", RetryConfig.ofDefaults());
     }
 
     @Override
@@ -102,8 +107,11 @@ public class CbrRateProvider implements RateProvider {
                     .addParameter("VAL_NM_RQ", currencyCode)
                     .build();
 
-            HttpResponse response = httpClient.execute(HttpHost.create(cbrHost), new HttpGet(uri));
-            CbrRateResponse cbrRateResponse = xmlPersister.read(CbrRateResponse.class, response.getEntity().getContent());
+            var httpHost = HttpHost.create(cbrHost);
+            var httpGet = new HttpGet(uri);
+            HttpResponse response = decorateCheckedSupplier(retry, () -> httpClient.execute(httpHost, httpGet)).apply();
+
+            var cbrRateResponse = xmlPersister.read(CbrRateResponse.class, response.getEntity().getContent());
 
             StreamEx.of(cbrRateResponse.getRecords())
                     .mapToEntry(CbrRateRecord::getDate, CbrRateRecord::getValue)
