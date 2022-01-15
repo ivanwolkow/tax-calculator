@@ -48,6 +48,7 @@ public class InteractiveBrokersTradeProvider implements TradeProvider {
                 .filter(record -> "trades".equalsIgnoreCase(record.get(0)))
                 .filter(record -> "data".equalsIgnoreCase(record.get(1)))
                 .filter(record -> "order".equalsIgnoreCase(record.get(2)))
+                .filter(record -> "stocks".equalsIgnoreCase(record.get(3)))
                 .map(this::tradeFromRecord)
                 .toList();
     }
