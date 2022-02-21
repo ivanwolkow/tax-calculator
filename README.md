@@ -9,3 +9,21 @@ Currently, project consists of two parts:
 
 You can use these tools either as standalone CLI application or via [tax-calculator-api](./tax-calculator-api) 
 which is deployed to a cloud application platform.
+
+## Build and run
+
+Build CLI shadow (fat) jars (capital-gains-calculator and dividend-calculator):
+
+```bash
+./gradlew shadowJar
+```
+
+Build tax-calculator-api:
+```bash
+./gradlew bootJar
+```
+
+Or run all checks&tests and build everything:
+```bash
+./gradlew check shadowJar bootJar
+```
