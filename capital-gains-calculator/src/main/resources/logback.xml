@@ -7,7 +7,8 @@
         </encoder>
     </appender>
 
-    <logger name="com.wolkow.taxcalculator" level="trace"/>
+    <logger name="com.wolkow.taxcalculator.capitalgains" level="debug"/>
+    <logger name="com.wolkow.taxcalculator.rateprovider" level="debug"/>
 
     <root level="info">
         <appender-ref ref="STDOUT" />

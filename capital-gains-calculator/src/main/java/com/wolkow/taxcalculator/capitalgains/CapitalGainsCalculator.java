@@ -29,7 +29,7 @@ public class CapitalGainsCalculator {
     }
 
     public void generateReport(Appendable destination, ZoneId taxZone, Integer taxYear, Reader... sources) {
-        log.debug("Collecting buys and sells...");
+        log.info("Collecting buys and sells...");
         Collection<Trade> tradeList = tradeProvider.readTrades(sources);
 
         Map<String, LinkedList<Trade>> buysByTicker = StreamEx.of(tradeList)
@@ -37,7 +37,7 @@ public class CapitalGainsCalculator {
                 .sorted(Comparator.comparing(Trade::getTime))
                 .groupingBy(Trade::getTicker, Collectors.toCollection(LinkedList::new));
 
-        buysByTicker.forEach((ticker, buys) -> log.trace("{}: {} buys", ticker, buys.size()));
+        buysByTicker.forEach((ticker, buys) -> log.debug("{}: {} buys", ticker, buys.size()));
 
         List<Gain> gains = StreamEx.of(tradeList)
                 .filter(trade -> trade.getQuantity() < 0)
@@ -47,7 +47,7 @@ public class CapitalGainsCalculator {
                 .filter(gain -> gain.getSell().getTime().atZone(taxZone).getYear() == taxYear)
                 .toList();
 
-        log.debug("Found {} sells in year {}. Lot-Matching result:", gains.size(), taxYear);
+        log.info("Found {} sells in year {}", gains.size(), taxYear);
         gains.forEach(gain -> log.debug(gain.toString()));
 
         reportGenerator.generateReport(destination, gains);

@@ -20,14 +20,12 @@ public class DividendCalculator {
 
     @SneakyThrows
     public void generateReport(Appendable destination, Integer taxYear, Reader... sources) {
-        log.debug("Searching for dividend accruals...");
-
         List<Dividend> dividends = StreamEx.of(divProvider.readDivs(sources))
                 .filterBy(div -> div.getDate().getYear(), taxYear)
                 .sortedBy(Dividend::getDate)
                 .toList();
 
-        log.debug("Found {} dividends in year {}", dividends.size(), taxYear);
+        log.info("Found {} dividends in year {}", dividends.size(), taxYear);
         dividends.forEach(div -> log.debug(div.toString()));
 
         reportGenerator.generateReport(destination, dividends);

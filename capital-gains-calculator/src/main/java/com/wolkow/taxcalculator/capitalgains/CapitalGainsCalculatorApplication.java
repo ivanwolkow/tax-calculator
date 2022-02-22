@@ -33,7 +33,9 @@ public class CapitalGainsCalculatorApplication {
     public static void main(String[] args) {
         ApplicationProperties props = properties(args);
 
+        log.info("Searching for csv files in {} ...", props.getReportDir());
         var sources = StreamEx.of(FileUtils.listFiles(props.getReportDir(), new String[]{"csv"}, true))
+                .peek(file -> log.info("Found: {}", file.getName()))
                 .map(CapitalGainsCalculatorApplication::createReportReader)
                 .toArray(Reader.class);
 

@@ -74,7 +74,7 @@ public class CbrRateProvider implements RateProvider {
 
         SimpleEntry<String, Integer> cacheKey = new SimpleEntry<>(currency, date.getYear());
         if (!cache.containsKey(cacheKey)) {
-            log.debug("Cache miss for currency {} , date {}, filling cache...", currency, date);
+            log.trace("Cache miss for currency {} , date {}, filling cache...", currency, date);
             fillCache(cacheKey);
         }
 
@@ -98,7 +98,7 @@ public class CbrRateProvider implements RateProvider {
         synchronized (sortedRatesByCurrencyAndYear) {
             if (!sortedRatesByCurrencyAndYear.isEmpty()) return;
 
-            log.debug("Populating conversion rate cache for {}:{}...", currency, year);
+            log.debug("Loading conversion rates for currency={}, year={} ...", currency, year);
             String currencyCode = requireNonNull(currencyResolver.resolveCodeByName(currency));
 
             URI uri = new URIBuilder("/scripts/XML_dynamic.asp")
@@ -109,6 +109,8 @@ public class CbrRateProvider implements RateProvider {
 
             var httpHost = HttpHost.create(cbrHost);
             var httpGet = new HttpGet(uri);
+
+            log.trace("Executing http request {}", httpGet);
             HttpResponse response = decorateCheckedSupplier(retry, () -> httpClient.execute(httpHost, httpGet)).apply();
 
             var cbrRateResponse = xmlPersister.read(CbrRateResponse.class, response.getEntity().getContent());

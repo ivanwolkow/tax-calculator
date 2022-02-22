@@ -62,7 +62,7 @@ public class CbrCurrencyResolver implements CurrencyResolver {
 
     @SneakyThrows
     private void loadCurrencyMapping(Map<String, String> map) {
-        log.info("Loading currency mappings...");
+        log.info("Loading currency mappings ...");
         URI uri = new URIBuilder("/scripts/XML_valFull.asp").build();
 
         HttpResponse response = httpClient.execute(HttpHost.create(cbrHost), new HttpGet(uri));
@@ -77,7 +77,7 @@ public class CbrCurrencyResolver implements CurrencyResolver {
                 .mapValues(String::trim)
                 .forKeyValue(map::put);
 
-        log.info("Loaded currency mapping for {} currencies", map.size());
+        log.trace("Loaded currency mappings for {} currencies", map.size());
     }
 
 }
